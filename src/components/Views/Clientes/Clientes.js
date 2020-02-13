@@ -1,22 +1,25 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import ListagemClientes from './ListagemClientes'
+import ListagemClientes from './ListagemClientes';
+import Cadastro from './Cadastro';
+import { Switch, Route , useRouteMatch } from "react-router-dom"
 
 export default function Clientes(){
+    let { path } = useRouteMatch()
+
     return(
         <div style={{padding : '50px'}}>
             <Typography gutterBottom variant="h5" component="h2">CLIENTES</Typography>
             <br />
             <div>
-                <div style={{ marginBottom: '20px' }}>
-                    <Button variant="contained" color="primary" >
-                        Cadastrar
-                    </Button>
-                </div>               
-                <div>
-                    <ListagemClientes />
-                </div>
+                <Switch>
+                    <Route exact path={path}>
+                        <ListagemClientes />
+                    </Route>                
+                    <Route path={`${path}/cadastro`}>
+                        <Cadastro />
+                    </Route>                
+                </Switch>                               
             </div> 
         </div>
     )

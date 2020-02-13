@@ -2,6 +2,7 @@ import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Dashboard from '../components/Views/Dashboard/Dashboard'
 import Clientes from '../components/Views/Clientes/Clientes'
+import Produtos from '../components/Views/Produtos/Produtos'
 
 
 export default function RouterMain(){
@@ -15,7 +16,7 @@ export default function RouterMain(){
                     <Clientes />
                 </Route>
                 <Route exact path="/produtos">
-                    <h1>Produtos</h1>
+                    <Produtos />
                 </Route>
             </Switch>
         </div>
