@@ -13,6 +13,7 @@ import Fab from '@material-ui/core/Fab';
 import { Link, useRouteMatch } from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 const columns = [
     { id: 'name', label: 'Nome', minWidth: 170 },
@@ -21,8 +22,7 @@ const columns = [
     { id: 'telefone', label: 'Telefone', minWidth: 100 },
     { id: 'celular', label: 'Celular', minWidth: 100 },
     { id: 'editar', label: '', minWidth: 100 },
-    { id: 'deletar', label: '', minWidth: 100 },
-    
+    { id: 'deletar', label: '', minWidth: 100 },    
 ];
 
 function createData(name, cnpj, email, telefone, celular, editar, deletar) {
@@ -67,7 +67,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function StickyHeadTable() {
+export default function StickyHeadTable({ set }) {
     let { url } = useRouteMatch()
 
     const classes = useStyles();
@@ -87,55 +87,59 @@ export default function StickyHeadTable() {
         <div>
 
             <div style={{ marginBottom: '20px' }}>
-                <Button variant="contained" color="primary" component={Link} to={`${url}/cadastro`}>
+                <Button onClick={() => set(<KeyboardBackspaceIcon onClick={() => alert('ok')}/>)} 
+                variant="contained" 
+                color="primary" 
+                component={Link} 
+                to={`${url}/cadastro`}>
                     Cadastrar
                 </Button>
             </div>
 
-        <Paper className={classes.root}>
-            <TableContainer className={classes.container}>
-                <Table stickyHeader aria-label="sticky table">
-                    <TableHead>
-                        <TableRow>
-                            {columns.map(column => (
-                                <TableCell
-                                    key={column.id}
-                                    align={column.align}
-                                    style={{ minWidth: column.minWidth }}
-                                >
-                                    {column.label}
-                                </TableCell>
-                            ))}
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
-                            return (
-                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                    {columns.map(column => {
-                                        const value = row[column.id];
-                                        return (
-                                            <TableCell key={column.id} align={column.align}>
-                                                {column.format && typeof value === 'number' ? column.format(value) : value}
-                                            </TableCell>
-                                        );
-                                    })}
-                                </TableRow>
-                            );
-                        })}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={rows.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-            />
-        </Paper>
+            <Paper className={classes.root}>
+                <TableContainer className={classes.container}>
+                    <Table stickyHeader aria-label="sticky table">
+                        <TableHead>
+                            <TableRow>
+                                {columns.map(column => (
+                                    <TableCell
+                                        key={column.id}
+                                        align={column.align}
+                                        style={{ minWidth: column.minWidth }}
+                                    >
+                                        {column.label}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+                                return (
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
+                                        {columns.map(column => {
+                                            const value = row[column.id];
+                                            return (
+                                                <TableCell key={column.id} align={column.align}>
+                                                    {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                </TableCell>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <TablePagination
+                    rowsPerPageOptions={[10, 25, 100]}
+                    component="div"
+                    count={rows.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                />
+            </Paper>
         </div>
     );
 }

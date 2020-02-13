@@ -12,10 +12,10 @@ export default function RouterMain(){
                 <Route exact path="/">
                     <Dashboard  />
                 </Route>
-                <Route exact path="/clientes">
+                <Route path="/clientes">
                     <Clientes />
                 </Route>
-                <Route exact path="/produtos">
+                <Route path="/produtos">
                     <Produtos />
                 </Route>
             </Switch>
