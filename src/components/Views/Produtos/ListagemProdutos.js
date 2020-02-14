@@ -54,7 +54,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function StickyHeadTable() {
+export default function StickyHeadTable({ set }) {
     let { url } = useRouteMatch()
 
     const classes = useStyles();
@@ -69,6 +69,10 @@ export default function StickyHeadTable() {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+
+    React.useEffect(() => {
+        set('PRODUTOS')
+    }, [])
 
     return (
         <div>

@@ -2,14 +2,13 @@ import React from 'react'
 import Typography from '@material-ui/core/Typography';
 import ListagemClientes from './ListagemClientes';
 import Cadastro from './Cadastro';
-import { Switch, Route , useRouteMatch, useHistory } from "react-router-dom"
+import { Switch, Route , useRouteMatch } from "react-router-dom"
 
 export default function Clientes(){
     let { path } = useRouteMatch()
-    let history = useHistory()
+
     const [title, setTitle] = React.useState("CLIENTES")
 
-    console.log(history)
     return(
         <div style={{padding : '50px'}}>
             

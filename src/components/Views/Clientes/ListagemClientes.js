@@ -13,50 +13,30 @@ import Fab from '@material-ui/core/Fab';
 import { Link, useRouteMatch } from 'react-router-dom'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import { GetFire } from '../../../util/firebase/RequestFire'
+
 
 const columns = [
     { id: 'name', label: 'Nome', minWidth: 170 },
     { id: 'cnpj', label: 'CNPJ', minWidth: 100 },
     { id: 'email', label: 'Email', minWidth: 100 },
     { id: 'telefone', label: 'Telefone', minWidth: 100 },
-    { id: 'celular', label: 'Celular', minWidth: 100 },
     { id: 'editar', label: '', minWidth: 100 },
     { id: 'deletar', label: '', minWidth: 100 },    
 ];
 
-function createData(name, cnpj, email, telefone, celular, editar, deletar) {
-    editar = <Fab  
+function createData(name, cnpj, email, telefone) {
+    let editar = <Fab  
     size="small" 
     color="primary" 
     aria-label="edit"
         style={{ backgroundColor: 'rgb(254, 231, 25)'}}
-    ><EditIcon /></Fab>
+    ><EditIcon /></Fab>    
     
+    let deletar = <Fab size="small" color="secondary" aria-label="edit"><DeleteForeverIcon /></Fab>   
     
-    
-    deletar = <Fab size="small" color="secondary" aria-label="edit"><DeleteForeverIcon /></Fab>   
-    
-    return { name, cnpj, email, telefone, celular, editar, deletar};
+    return { name, cnpj, email, telefone, editar, deletar};
 }
-
-const rows = [
-    createData('India', 'IN', 1324171354, 3287263),
-    createData('China', 'CN', 1403500365, 9596961),
-    createData('Italy', 'IT', 60483973, 301340),
-    createData('United States', 'US', 327167434, 9833520),
-    createData('Canada', 'CA', 37602103, 9984670),
-    createData('Australia', 'AU', 25475400, 7692024),
-    createData('Germany', 'DE', 83019200, 357578),
-    createData('Ireland', 'IE', 4857000, 70273),
-    createData('Mexico', 'MX', 126577691, 1972550),
-    createData('Japan', 'JP', 126317000, 377973),
-    createData('France', 'FR', 67022000, 640679),
-    createData('United Kingdom', 'GB', 67545757, 242495),
-    createData('Russia', 'RU', 146793744, 17098246),
-    createData('Nigeria', 'NG', 200962417, 923768),
-    createData('Brazil', 'BR', 210147125, 8515767),
-];
 
 const useStyles = makeStyles({
     root: {
@@ -70,9 +50,13 @@ const useStyles = makeStyles({
 export default function StickyHeadTable({ set }) {
     let { url } = useRouteMatch()
 
+
+
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    let rowsAux = []
+    const [rows, setRows] = React.useState([])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -82,12 +66,26 @@ export default function StickyHeadTable({ set }) {
         setRowsPerPage(+event.target.value);
         setPage(0);
     };
+    
+    React.useEffect(() => {
+        set('CLIENTES')
+        GetFire("clientes").then(data => {
+            data.docs.map( map => {
+                rowsAux.push(map.data())
+            })       
+        }).then(d => {
+            console.log(rowsAux)
+            rowsAux.map(map => {
+                setRows([...rows , createData(map.nome, map.cnpj, map.email, map.telefone)])
+            })
+        })
+    }, [])
 
     return (
         <div>
 
             <div style={{ marginBottom: '20px' }}>
-                <Button onClick={() => set(<KeyboardBackspaceIcon onClick={() => alert('ok')}/>)} 
+                <Button  
                 variant="contained" 
                 color="primary" 
                 component={Link} 

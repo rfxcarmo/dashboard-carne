@@ -6,6 +6,8 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import InputLabel from '@material-ui/core/InputLabel';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import FormControl from '@material-ui/core/FormControl';
+import { useHistory } from 'react-router-dom'
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -27,8 +29,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function BasicTextFields() {
+export default function BasicTextFields({ set }) {
     const classes = useStyles();
+    const history = useHistory()
+
+    React.useEffect(() => {
+        set(<KeyboardBackspaceIcon onClick={() => history.goBack()} />)
+    }, [])
 
     return (
         <form className={classes.root} noValidate autoComplete="off">

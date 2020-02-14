@@ -7,17 +7,19 @@ import { Switch, Route, useRouteMatch } from "react-router-dom"
 export default function Clientes() {
     let { path } = useRouteMatch()
 
+    const [title, setTitle] = React.useState("PRODUTOS")
+
     return (
         <div style={{ padding: '50px' }}>
-            <Typography gutterBottom variant="h5" component="h2">Produtos</Typography>
+            <Typography gutterBottom variant="h5" component="h2">{title}</Typography>
             <br />
             <div>
                 <Switch>
                     <Route exact path={path}>
-                        <ListagemProdutos />                        
+                        <ListagemProdutos set={setTitle}/>                        
                     </Route>
                     <Route path={`${path}/cadastro`}>
-                        <Cadastro />
+                        <Cadastro set={setTitle}/>
                     </Route>
                 </Switch>
             </div>
