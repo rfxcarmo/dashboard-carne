@@ -54,7 +54,7 @@ const useStyles = makeStyles({
     },
 });
 
-export default function StickyHeadTable({ set }) {
+export default function StickyHeadTable({ set , tipo }) {
     let { url } = useRouteMatch()
 
     const classes = useStyles();
@@ -76,7 +76,7 @@ export default function StickyHeadTable({ set }) {
 
     return (
         <div>
-
+            {tipo}
             <div style={{ marginBottom: '20px' }}>
                 <Button variant="contained" color="primary" component={Link} to={`${url}/cadastro`}>
                     Cadastrar

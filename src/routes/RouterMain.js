@@ -1,8 +1,9 @@
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 import Dashboard from '../components/Views/Dashboard/Dashboard'
-import Clientes from '../components/Views/Clientes/Clientes'
+import Frigorificos from '../components/Views/Frigorificos/Frigorificos'
 import Produtos from '../components/Views/Produtos/Produtos'
+import Acougue from '../components/Views/Acougue/Acougue'
 
 
 export default function RouterMain(){
@@ -12,11 +13,14 @@ export default function RouterMain(){
                 <Route exact path="/">
                     <Dashboard  />
                 </Route>
-                <Route path="/clientes">
-                    <Clientes />
-                </Route>
                 <Route path="/produtos">
                     <Produtos />
+                </Route>
+                <Route path="/frigorificos">
+                    <Frigorificos />
+                </Route>                
+                <Route path="/acougue">
+                    <Acougue />
                 </Route>
             </Switch>
         </div>

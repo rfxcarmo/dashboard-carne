@@ -50,12 +50,10 @@ const useStyles = makeStyles({
 export default function StickyHeadTable({ set }) {
     let { url } = useRouteMatch()
 
-
-
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    let rowsAux = []
+    const [ids, setIds] = React.useState([])    
     const [rows, setRows] = React.useState([])
 
     const handleChangePage = (event, newPage) => {
@@ -68,16 +66,28 @@ export default function StickyHeadTable({ set }) {
     };
     
     React.useEffect(() => {
-        set('CLIENTES')
+        set('FRIGORIFICOS')
+
+        const setI = (d) => {
+            let auxID = d.docs.map(m => m.id)
+            setIds(auxID)
+            console.log(ids)
+        }
+
         GetFire("clientes").then(data => {
+            setI(data)
+
+            let rowsAux = []
             data.docs.map( map => {
                 rowsAux.push(map.data())
-            })       
-        }).then(d => {
-            console.log(rowsAux)
-            rowsAux.map(map => {
-                setRows([...rows , createData(map.nome, map.cnpj, map.email, map.telefone)])
             })
+            
+            let arrayAux = []
+            rowsAux.map(map => {
+                arrayAux.push(createData(map.nome, map.cnpj, map.email, map.telefone))
+            })
+            setRows(arrayAux)              
+        
         })
     }, [])
 
@@ -111,13 +121,13 @@ export default function StickyHeadTable({ set }) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map(row => {
+                            {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index)=> {
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                        {columns.map(column => {
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                        {columns.map((column , indexC) => {
                                             const value = row[column.id];
                                             return (
-                                                <TableCell key={column.id} align={column.align}>
+                                                <TableCell key={indexC} align={column.align}>
                                                     {column.format && typeof value === 'number' ? column.format(value) : value}
                                                 </TableCell>
                                             );

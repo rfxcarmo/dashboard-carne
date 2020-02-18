@@ -13,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import GroupIcon from '@material-ui/icons/Group';
 import LocalDiningTwoToneIcon from '@material-ui/icons/LocalDiningTwoTone';
 import { Link } from 'react-router-dom';
+import { Switch } from '@material-ui/core';
 
 const useStyles = makeStyles({
     list: {
@@ -45,8 +46,21 @@ export default function TemporaryDrawer({set}) {
             onKeyDown={toggleDrawer(side, false)}
         >
             <List>
-                {['Clientes', 'Produtos'].map((text, index) => {
-                    let path = index % 2 === 0 ? `/clientes` : `/produtos`
+                {['Produtos', 'Frigorificos', 'Açougue'].map((text, index) => {
+                    let path
+                    switch(index) {
+                        case 0:
+                            path = `/produtos`
+                            break;
+                        case 1:
+                            path = `/frigorificos`
+                            break;
+                        case 2:
+                            path = `/acougue`
+                            break;                    
+                        default:
+                            break;
+                    }
                     return <ListItem button key={text} component={Link} to={path} onClick={() => set(text)}>
                         <ListItemIcon>{index % 2 === 0 ? <GroupIcon /> : <LocalDiningTwoToneIcon />}</ListItemIcon>
                         <ListItemText primary={text} />
