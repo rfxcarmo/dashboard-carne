@@ -8,25 +8,33 @@ export function GetFire( col ) {
     })
 }
 
-export function PostFire(contato) {
+export function PostFire(col, contato) {
     const db = firebase.firestore()
-    db.collection("agenda").add(contato)
+    db.collection(col).add(contato)
 }
 
-export function UpdateFire(id, contato) {
+export function UpdateFire(col, id, contato) {
     const db = firebase.firestore()
-    return db.collection("agenda").doc(id).update(contato)
+    return db.collection(col).doc(id).update(contato)
 }
 
-export function DeleteFire(id) {
+export function DeleteFire(col, id) {
     const db = firebase.firestore()
-    return db.collection("agenda").doc(id).delete()
+    return db.collection(col).doc(id).delete()
 }
 
-export function OrdenaFire(busca) {
+export function FiltroProdutoTipoFire(col , tipo) {
     return new Promise((resolve, reject) => {
         const db = firebase.firestore()
-        const data = db.collection("agenda").where("nome", "==", busca).get()
+        const data = db.collection(col).where("tipo", "==", tipo).get()
+        resolve(data)
+    })
+}
+
+export function DetalheFire(col, id) {
+    return new Promise((resolve, reject) => {
+        const db = firebase.firestore()
+        const data = db.collection(col).doc(id).get()
         resolve(data)
     })
 }

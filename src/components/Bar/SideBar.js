@@ -29,6 +29,8 @@ export default function TemporaryDrawer({set}) {
     const [state, setState] = React.useState({
         left: false
     });
+    const array = ['Dashboard', 'Açougues', 'Frigorificos', 'Produtos', 'Pedidos']
+    const arrayRoutes = [`/`, `/acougues`, `/frigorificos` ,`/produtos`, `/pedidos`]
 
     const toggleDrawer = (side, open) => event => {
         if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -46,22 +48,11 @@ export default function TemporaryDrawer({set}) {
             onKeyDown={toggleDrawer(side, false)}
         >
             <List>
-                {['Produtos', 'Frigorificos', 'Açougue'].map((text, index) => {
-                    let path
-                    switch(index) {
-                        case 0:
-                            path = `/produtos`
-                            break;
-                        case 1:
-                            path = `/frigorificos`
-                            break;
-                        case 2:
-                            path = `/acougue`
-                            break;                    
-                        default:
-                            break;
-                    }
-                    return <ListItem button key={text} component={Link} to={path} onClick={() => set(text)}>
+                {array.map((text, index) => {
+                    
+                    let path = arrayRoutes[index]
+                    
+                    return <ListItem button key={index} component={Link} to={path} onClick={() => set(text)}>
                         <ListItemIcon>{index % 2 === 0 ? <GroupIcon /> : <LocalDiningTwoToneIcon />}</ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItem>
@@ -69,9 +60,15 @@ export default function TemporaryDrawer({set}) {
             </List>
             <Divider />
             <List>
-                {['Inbox'].map((text, index) => (
-                    <ListItem button key={text}>
-                        <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                {['Chat'].map((text, index) => (
+                    <ListItem button key={index}>
+                        <ListItemIcon><InboxIcon /></ListItemIcon>
+                        <ListItemText primary={text} />
+                    </ListItem>
+                ))}
+                {['Sair'].map((text, index) => (
+                    <ListItem button key={index}>
+                        <ListItemIcon><InboxIcon /></ListItemIcon>
                         <ListItemText primary={text} />
                     </ListItem>
                 ))}

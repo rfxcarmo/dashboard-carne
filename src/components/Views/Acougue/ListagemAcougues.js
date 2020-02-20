@@ -66,16 +66,12 @@ export default function StickyHeadTable({ set }) {
     };
     
     React.useEffect(() => {
-        set('FRIGORIFICOS')
-
-        const setI = (d) => {
-            let auxID = d.docs.map(m => m.id)
-            setIds(auxID)
-            console.log(ids)
-        }
+        set('AÇOUGUES')
+            
 
         GetFire("clientes").then(data => {
-            setI(data)
+            let auxID = data.docs.map(m => m.id)
+            console.log(data.docs)
 
             let rowsAux = []
             data.docs.map( map => {

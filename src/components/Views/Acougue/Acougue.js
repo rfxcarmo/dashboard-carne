@@ -7,7 +7,7 @@ import { Switch, Route, useRouteMatch } from "react-router-dom"
 export default function Clientes() {
     let { path } = useRouteMatch()
 
-    const [title, setTitle] = React.useState("CLIENTES")
+    const [title, setTitle] = React.useState("AÇOUGUES")
 
     return (
         <div style={{ padding: '50px' }}>

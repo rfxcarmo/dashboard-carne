@@ -13,15 +13,17 @@ import { Link, useRouteMatch } from 'react-router-dom'
 import Fab from '@material-ui/core/Fab'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import { FiltroProdutoTipoFire , GetFire } from '../../../util/firebase/RequestFire'
 
 const columns = [
     { id: 'name', label: 'Nome', minWidth: 170 },
     { id: 'VKG', label: 'Valor por KG', minWidth: 100 },
+    { id: 'tipo', label: 'Tipo', minWidth: 100 },
     { id: 'editar', label: '', minWidth: 100 },
     { id: 'deletar', label: '', minWidth: 100 },
 ];
 
-function createData(name, VKG, editar, deletar) {
+function createData(name, VKG, tipo, editar, deletar) {
     editar = <Fab
         size="small"
         color="primary"
@@ -30,20 +32,8 @@ function createData(name, VKG, editar, deletar) {
     ><EditIcon /></Fab>
     deletar = <Fab size="small" color="secondary" aria-label="edit"><DeleteForeverIcon /></Fab>
     
-    return { name, VKG , editar, deletar} //, population, size, density };
+    return { name, VKG, tipo , editar, deletar} //, population, size, density };
 }
-
-const rows = [
-    createData('India', 'IN'),
-    createData('China', 'CN'),
-    createData('Italy', 'IT'),
-    createData('United States', 'US'),
-    createData('Canada', 'CA'),
-    createData('Australia', 'AU'),
-    createData('Germany', 'DE'),
-    createData('Ireland', 'IE'),
-    createData('Mexico', 'MX'),
-];
 
 const useStyles = makeStyles({
     root: {
@@ -56,10 +46,11 @@ const useStyles = makeStyles({
 
 export default function StickyHeadTable({ set , tipo }) {
     let { url } = useRouteMatch()
-
+    
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const [rows, setRows] = React.useState([])
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -72,6 +63,37 @@ export default function StickyHeadTable({ set , tipo }) {
 
     React.useEffect(() => {
         set('PRODUTOS')
+
+        if(tipo == null){
+            GetFire("produtos").then(data => {
+
+                let rowsAux = []
+                data.docs.map(map => 
+                    rowsAux.push(map.data())
+                )
+
+                let arrayAux = []
+                rowsAux.map(map => 
+                    arrayAux.push(createData(map.nome, map.valor, map.tipo))
+                )
+                setRows(arrayAux)
+
+            })
+        }else{
+            FiltroProdutoTipoFire("produtos", tipo).then(data => {
+
+                let rowsAux = []
+                data.docs.map(map => 
+                    rowsAux.push(map.data())
+                )
+
+                let arrayAux = []
+                rowsAux.map(map => 
+                    arrayAux.push(createData(map.nome, map.valor, map.tipo))
+                )
+                setRows(arrayAux)
+            })
+        }
     }, [])
 
     return (

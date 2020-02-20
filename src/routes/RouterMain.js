@@ -19,8 +19,11 @@ export default function RouterMain(){
                 <Route path="/frigorificos">
                     <Frigorificos />
                 </Route>                
-                <Route path="/acougue">
+                <Route path="/acougues">
                     <Acougue />
+                </Route>
+                <Route path="/pedidos">
+                    <h1>Pedidos</h1>
                 </Route>
             </Switch>
         </div>

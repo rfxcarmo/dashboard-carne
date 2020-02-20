@@ -1,9 +1,8 @@
-import React from 'react';
+import React , { useState }from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import { useHistory } from 'react-router-dom'
+import { DetalheFire } from '../../../util/firebase/RequestFire'
 
 
 const useStyles = makeStyles(theme => ({
@@ -11,6 +10,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        backgroundColor: 'white',
         '& > *': {
             margin: theme.spacing(1),
             width: 500,            
@@ -26,13 +26,25 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function BasicTextFields( { set }) {
+export default function BasicTextFields( { id }) {
     const classes = useStyles();
-    const history = useHistory()
+    const [values, setValues] = useState();
+
+    
     
     React.useEffect(() => {
-        set(<KeyboardBackspaceIcon onClick={() => history.goBack()} />)
-    },[])
+        const detalhe = () => {
+        return DetalheFire("clientes", id)
+                .then(d => {
+                    let da = d.data()                    
+                }).then(d => {
+                    console.log(values)
+                })
+        }
+
+        setValues('da')
+        detalhe()
+    }, [])
 
     return (
         <form className={classes.root} noValidate autoComplete="off">

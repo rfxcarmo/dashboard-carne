@@ -1,7 +1,8 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography';
-import ListagemClientes from './ListagemClientes';
+import ListagemClientes from './ListagemFrigorificos';
 import Cadastro from './Cadastro';
+import DetalhesFrigo from './DetalhesFrigo'
 import { Switch, Route , useRouteMatch } from "react-router-dom"
 
 export default function Clientes(){
@@ -21,6 +22,9 @@ export default function Clientes(){
                     </Route>         
                     <Route path={`${path}/cadastro`}>
                         <Cadastro set={setTitle}/>
+                    </Route>
+                    <Route path={`${path}/detalhes`}>
+                        <DetalhesFrigo />
                     </Route>               
                 </Switch>                               
             </div> 

@@ -11,12 +11,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import { Link, useRouteMatch } from 'react-router-dom'
-import EditIcon from '@material-ui/icons/Edit';
+import Modal from './ModalCadastroFrigo'
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { GetFire } from '../../../util/firebase/RequestFire'
+import { GetFire, DeleteFire} from '../../../util/firebase/RequestFire'
 
 
 const columns = [
+    { id: 'id', label: 'ID', minWidth: 100 },
     { id: 'name', label: 'Nome', minWidth: 170 },
     { id: 'cnpj', label: 'CNPJ', minWidth: 100 },
     { id: 'email', label: 'Email', minWidth: 100 },
@@ -25,17 +26,12 @@ const columns = [
     { id: 'deletar', label: '', minWidth: 100 },    
 ];
 
-function createData(name, cnpj, email, telefone) {
-    let editar = <Fab  
-    size="small" 
-    color="primary" 
-    aria-label="edit"
-        style={{ backgroundColor: 'rgb(254, 231, 25)'}}
-    ><EditIcon /></Fab>    
+function createData(id , name, cnpj, email, telefone) {
+    let editar = <Modal fun={1} id= {id}/>    
     
-    let deletar = <Fab size="small" color="secondary" aria-label="edit"><DeleteForeverIcon /></Fab>   
+    let deletar = <Fab size="small" color="secondary" onClick={() => DeleteFire("clientes", id)} aria-label="edit"><DeleteForeverIcon /></Fab>   
     
-    return { name, cnpj, email, telefone, editar, deletar};
+    return { id, name, cnpj, email, telefone, editar, deletar};
 }
 
 const useStyles = makeStyles({
@@ -52,8 +48,7 @@ export default function StickyHeadTable({ set }) {
 
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
-    const [rowsPerPage, setRowsPerPage] = React.useState(10);
-    const [ids, setIds] = React.useState([])    
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);   
     const [rows, setRows] = React.useState([])
 
     const handleChangePage = (event, newPage) => {
@@ -68,14 +63,9 @@ export default function StickyHeadTable({ set }) {
     React.useEffect(() => {
         set('FRIGORIFICOS')
 
-        const setI = (d) => {
-            let auxID = d.docs.map(m => m.id)
-            setIds(auxID)
-            console.log(ids)
-        }
-
         GetFire("clientes").then(data => {
-            setI(data)
+            let auxID = []
+            data.docs.map(m => auxID.push(m.id))
 
             let rowsAux = []
             data.docs.map( map => {
@@ -83,8 +73,8 @@ export default function StickyHeadTable({ set }) {
             })
             
             let arrayAux = []
-            rowsAux.map(map => {
-                arrayAux.push(createData(map.nome, map.cnpj, map.email, map.telefone))
+            rowsAux.map((map, i) => {
+                arrayAux.push(createData(auxID[i], map.nome, map.cnpj, map.email, map.telefone))
             })
             setRows(arrayAux)              
         
@@ -95,13 +85,7 @@ export default function StickyHeadTable({ set }) {
         <div>
 
             <div style={{ marginBottom: '20px' }}>
-                <Button  
-                variant="contained" 
-                color="primary" 
-                component={Link} 
-                to={`${url}/cadastro`}>
-                    Cadastrar
-                </Button>
+                <Modal fun={0} />
             </div>
 
             <Paper className={classes.root}>
@@ -126,8 +110,15 @@ export default function StickyHeadTable({ set }) {
                                     <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                         {columns.map((column , indexC) => {
                                             const value = row[column.id];
+                                            if(column.id === 'id'){
+                                                return (
+                                                    <TableCell key={indexC} align={column.align} component={Link} to={`${url}/detalhes?id=${value}`}>
+                                                        {column.format && typeof value === 'number' ? column.format(value) : value}
+                                                    </TableCell>
+                                                );
+                                            }
                                             return (
-                                                <TableCell key={indexC} align={column.align}>
+                                                <TableCell key={indexC} align={column.align} >
                                                     {column.format && typeof value === 'number' ? column.format(value) : value}
                                                 </TableCell>
                                             );
