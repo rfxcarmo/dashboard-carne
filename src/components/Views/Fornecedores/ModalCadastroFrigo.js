@@ -6,6 +6,7 @@ import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
 import Button from '@material-ui/core/Button';
+import { DetalheFire } from '../../../util/firebase/RequestFire'
 import Cadastro from './Cadastro'
 
 const useStyles = makeStyles(theme => ({
@@ -22,9 +23,10 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-export default function TransitionsModal({ fun , id}) {
+export default function TransitionsModal({ fun , id }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
+    const [data , setData ] = React.useState('')
 
     const handleOpen = () => {
         setOpen(true);
@@ -33,6 +35,16 @@ export default function TransitionsModal({ fun , id}) {
     const handleClose = () => {
         setOpen(false);
     };
+
+    React.useEffect(() => {
+        if( id !== null){
+        DetalheFire("clientes", id)
+            .then(d => {
+                let view = d.data()
+                setData({ nome: view.nome, cnpj: view.cnpj, email: view.email, telefone: view.telefone})
+                console.log(data)
+            })}
+    }, [])
 
     return (
         <div>

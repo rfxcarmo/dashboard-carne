@@ -11,6 +11,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import { Link, useRouteMatch } from 'react-router-dom'
 import Fab from '@material-ui/core/Fab'
+import ButtonGroup from '@material-ui/core/ButtonGroup'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { FiltroProdutoTipoFire , GetFire } from '../../../util/firebase/RequestFire'
@@ -44,13 +45,14 @@ const useStyles = makeStyles({
     },
 });
 
-export default function StickyHeadTable({ set , tipo }) {
+export default function StickyHeadTable({ set }) {
     let { url } = useRouteMatch()
     
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [rows, setRows] = React.useState([])
+    const [tipo , setTipo] = React.useState('')
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -63,8 +65,6 @@ export default function StickyHeadTable({ set , tipo }) {
 
     React.useEffect(() => {
         set('PRODUTOS')
-
-        if(tipo == null){
             GetFire("produtos").then(data => {
 
                 let rowsAux = []
@@ -79,26 +79,37 @@ export default function StickyHeadTable({ set , tipo }) {
                 setRows(arrayAux)
 
             })
-        }else{
+    }, [])
+
+    React.useEffect(() => {
+        if(tipo !== ''){
             FiltroProdutoTipoFire("produtos", tipo).then(data => {
 
                 let rowsAux = []
-                data.docs.map(map => 
+                data.docs.map(map =>
                     rowsAux.push(map.data())
                 )
 
                 let arrayAux = []
-                rowsAux.map(map => 
+                rowsAux.map(map =>
                     arrayAux.push(createData(map.nome, map.valor, map.tipo))
                 )
                 setRows(arrayAux)
             })
         }
-    }, [])
+    }, [tipo])
 
     return (
-        <div>
-            {tipo}
+        <div >
+            <div style={{ width : '100%' }}>
+                <ButtonGroup color="secondary" aria-label="outlined secondary button group" style={{ width: '100%' }}>
+                    <Button onClick={() => setTipo('bovino')}>Bovino</Button>
+                    <Button onClick={() => setTipo('suino')}>Suino</Button>
+                    <Button onClick={() => setTipo('aviario')}>Aviario</Button>
+                    <Button onClick={() => setTipo('peixe')}>Peixe</Button>
+                </ButtonGroup>
+            </div>
+            <br />
             <div style={{ marginBottom: '20px' }}>
                 <Button variant="contained" color="primary" component={Link} to={`${url}/cadastro`}>
                     Cadastrar

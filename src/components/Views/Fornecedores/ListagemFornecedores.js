@@ -85,7 +85,7 @@ export default function StickyHeadTable({ set }) {
         <div>
 
             <div style={{ marginBottom: '20px' }}>
-                <Modal fun={0} />
+                <Modal fun={0} id={null}/>
             </div>
 
             <Paper className={classes.root}>

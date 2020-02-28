@@ -1,6 +1,6 @@
 import React from 'react'
 import Typography from '@material-ui/core/Typography';
-import ListagemClientes from './ListagemFrigorificos';
+import ListagemClientes from './ListagemFornecedores';
 import Cadastro from './Cadastro';
 import DetalhesFrigo from './DetalhesFrigo'
 import { Switch, Route , useRouteMatch } from "react-router-dom"

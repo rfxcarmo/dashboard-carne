@@ -1,95 +1,163 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import clsx from 'clsx';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import MenuIcon from '@material-ui/icons/Menu';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
-import IconButton from '@material-ui/core/IconButton';
-import GroupIcon from '@material-ui/icons/Group';
-import LocalDiningTwoToneIcon from '@material-ui/icons/LocalDiningTwoTone';
+import RouterMain from '../../routes/RouterMain';
+import Typography from '@material-ui/core/Typography';
+import InstagramIcon from '@material-ui/icons/Instagram';
+import TwitterIcon from '@material-ui/icons/Twitter';
+import FacebookIcon from '@material-ui/icons/Facebook';
 import { Link } from 'react-router-dom';
-import { Switch } from '@material-ui/core';
 
-const useStyles = makeStyles({
-    list: {
-        width: 250,
-    },
-    fullList: {
-        width: 'auto',
-    },
-});
+const drawerWidth = 240;
 
-export default function TemporaryDrawer({set}) {
+const useStyles = makeStyles(theme => ({
+    root: {
+        display: 'flex',
+    },
+    drawer: {
+        width: drawerWidth,
+        flexShrink: 0,
+        whiteSpace: 'nowrap',
+        backgroundColor : 'red'
+    },
+    drawerOpen: {
+        width: drawerWidth,
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+        backgroundImage: ' linear-gradient(180deg, #c31717 0%, #620c0c 100%);'
+    },
+    drawerClose: {
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        overflowX: 'hidden',
+        width: theme.spacing(7) + 1,
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing(8) + 1,
+        },
+        backgroundImage: ' linear-gradient(180deg, #c31717 0%, #620c0c 100%);'
+    },
+    toolbar: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: theme.spacing(0, 1),
+        ...theme.mixins.toolbar,
+        color : 'white'
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+    },
+    colorText:{
+        color : 'white',
+        fontSize: '27px',
+        fontWeight: 300
+    },
+    social : {
+        color: 'white',
+        fontSize: '15px',
+        fontWeight: 150,
+        marginRight: '20px'
+    }, 
+    divSocial : {
+        display: 'flex', 
+        flexDirection: 'column', 
+        position: 'absolute', 
+        bottom: '10px', 
+        width: '100%', 
+        alignItems: 'center'
+    }
+}));
+
+export default function MiniDrawer() {
     const classes = useStyles();
-    const [state, setState] = React.useState({
-        left: false
-    });
-    const array = ['Dashboard', 'Açougues', 'Frigorificos', 'Produtos', 'Pedidos']
-    const arrayRoutes = [`/`, `/acougues`, `/frigorificos` ,`/produtos`, `/pedidos`]
+    const theme = useTheme();
+    const [open, setOpen] = React.useState(false);
 
-    const toggleDrawer = (side, open) => event => {
-        if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-            return;
-        }
+    const array = ['Dashboard', 'Açougues', 'Fornecedores', 'Produtos', 'Pedidos', 'Chat']
+    const arrayRoutes = [`/`, `/acougues`, `/fornecedores`, `/produtos`, `/pedidos`, `/chat`]
 
-        setState({ ...state, [side]: open });
+    const handleDrawerOpen = () => {
+        setOpen(true);
     };
 
-    const sideList = side => (
-        <div
-            className={classes.list}
-            role="presentation"
-            onClick={toggleDrawer(side, false)}
-            onKeyDown={toggleDrawer(side, false)}
-        >
-            <List>
-                {array.map((text, index) => {
-                    
-                    let path = arrayRoutes[index]
-                    
-                    return <ListItem button key={index} component={Link} to={path} onClick={() => set(text)}>
-                        <ListItemIcon>{index % 2 === 0 ? <GroupIcon /> : <LocalDiningTwoToneIcon />}</ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                })}
-            </List>
-            <Divider />
-            <List>
-                {['Chat'].map((text, index) => (
-                    <ListItem button key={index}>
-                        <ListItemIcon><InboxIcon /></ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-                {['Sair'].map((text, index) => (
-                    <ListItem button key={index}>
-                        <ListItemIcon><InboxIcon /></ListItemIcon>
-                        <ListItemText primary={text} />
-                    </ListItem>
-                ))}
-            </List>
-        </div>
-    );
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
     return (
-        <div>
-            <IconButton
-                edge="start"
-                className={classes.menuButton}
-                color="inherit"
-                aria-label="open drawer"
-                onClick={toggleDrawer('left', true)}
-            >
-                <MenuIcon />
-            </IconButton>
-            <Drawer open={state.left} onClose={toggleDrawer('left', false)}>
-                {sideList('left')}
+        <div className={classes.root}>
+            <Drawer
+                variant="permanent"
+                className={clsx(classes.drawer, {
+                    [classes.drawerOpen]: open,
+                    [classes.drawerClose]: !open,
+                })}
+                classes={{
+                    paper: clsx({
+                        [classes.drawerOpen]: open,
+                        [classes.drawerClose]: !open,
+                    }),
+                }}
+            >                
+                <div className={classes.toolbar}>
+                    {open === true ? <IconButton onClick={handleDrawerClose} className={classes.colorText}>
+                        <MenuIcon style={{ transform: 'rotate(90deg)' }}/>
+                    </IconButton> : 
+                        <IconButton
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            className={classes.colorText}
+                        ><MenuIcon /></IconButton>
+                    }
+                </div>
+                <Divider />
+                < br/>
+                {open === true ? <Typography className={classes.colorText}
+                    style={{ marginLeft: '36px' }} >Olá, <br />Arthur Weiler!</Typography> : <div></div>}            
+                <List>
+                    {array.map((text, index) => {
+                        let path = arrayRoutes[index]
+                        return <ListItem component={Link} to={path} button key={text}>
+                            <ListItemIcon className={classes.colorText} >{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                            <ListItemText className={classes.colorText} primary={text} />
+                        </ListItem>
+                    })}
+                </List>
+                <Divider />
+                <ListItem button key="Sair">
+                    <ListItemIcon className={classes.colorText} ><MailIcon /></ListItemIcon>
+                    <ListItemText className={classes.colorText} primary="Sair" />
+                </ListItem>
+                {open === true ? <div className={classes.divSocial}>
+                    <img src={require('../../images/logo_branca.png')} height="115" width="167"
+                                ></img> 
+                    <div style={{ marginTop: '100px'}}>
+                        <InstagramIcon className={classes.social} />
+                        <TwitterIcon className={classes.social} />
+                        <FacebookIcon className={classes.social} />
+                    </div>
+                </div>
+                    : <p></p>}
             </Drawer>
+            <main className={classes.content}>
+                <RouterMain />
+            </main>
         </div>
     );
 }
