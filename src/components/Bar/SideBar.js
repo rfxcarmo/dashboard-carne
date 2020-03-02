@@ -1,6 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -85,7 +85,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function MiniDrawer() {
     const classes = useStyles();
-    const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
     const array = ['Dashboard', 'Açougues', 'Fornecedores', 'Produtos', 'Pedidos', 'Chat']
@@ -145,7 +144,7 @@ export default function MiniDrawer() {
                     <ListItemText className={classes.colorText} primary="Sair" />
                 </ListItem>
                 {open === true ? <div className={classes.divSocial}>
-                    <img src={require('../../images/logo_branca.png')} height="115" width="167"
+                    <img src={require('../../images/logo_branca.png')} height="115" width="167" alt="iFrigo"
                                 ></img> 
                     <div style={{ marginTop: '100px'}}>
                         <InstagramIcon className={classes.social} />

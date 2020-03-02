@@ -8,7 +8,6 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Button from '@material-ui/core/Button';
 import Fab from '@material-ui/core/Fab';
 import { Link, useRouteMatch } from 'react-router-dom'
 import Modal from './ModalCadastroFrigo'
@@ -27,9 +26,9 @@ const columns = [
 ];
 
 function createData(id , name, cnpj, email, telefone) {
-    let editar = <Modal fun={1} id= {id}/>    
+    let editar = <Modal fun={0} />    
     
-    let deletar = <Fab size="small" color="secondary" onClick={() => DeleteFire("clientes", id)} aria-label="edit"><DeleteForeverIcon /></Fab>   
+    let deletar = <Fab size="small" color="secondary" onClick={() => DeleteFire("clientes", id)} aria-label="edit" style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}><DeleteForeverIcon /></Fab>   
     
     return { id, name, cnpj, email, telefone, editar, deletar};
 }
@@ -43,8 +42,9 @@ const useStyles = makeStyles({
     },
 });
 
-export default function StickyHeadTable({ set }) {
+export default function StickyHeadTable() {
     let { url } = useRouteMatch()
+    var ids = []
 
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
@@ -61,33 +61,22 @@ export default function StickyHeadTable({ set }) {
     };
     
     React.useEffect(() => {
-        set('FRIGORIFICOS')
-
         GetFire("clientes").then(data => {
-            let auxID = []
-            data.docs.map(m => auxID.push(m.id))
+            data.docs.map(m => ids.push(m.id))            
+            console.log(ids)
 
             let rowsAux = []
-            data.docs.map( map => {
-                rowsAux.push(map.data())
-            })
+            data.docs.map( map => rowsAux.push(map.data()))
             
             let arrayAux = []
-            rowsAux.map((map, i) => {
-                arrayAux.push(createData(auxID[i], map.nome, map.cnpj, map.email, map.telefone))
-            })
-            setRows(arrayAux)              
-        
+            rowsAux.map((map, i) => arrayAux.push(createData(ids[i], map.nome, map.cnpj, map.email, map.telefone)))
+            
+            setRows(arrayAux)       
         })
     }, [])
 
     return (
         <div>
-
-            <div style={{ marginBottom: '20px' }}>
-                <Modal fun={0} id={null}/>
-            </div>
-
             <Paper className={classes.root}>
                 <TableContainer className={classes.container}>
                     <Table stickyHeader aria-label="sticky table">
@@ -106,13 +95,15 @@ export default function StickyHeadTable({ set }) {
                         </TableHead>
                         <TableBody>
                             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index)=> {
+                                let num = index
+                                console.log(ids)
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={index} >
                                         {columns.map((column , indexC) => {
                                             const value = row[column.id];
-                                            if(column.id === 'id'){
+                                            if (column.id === 'name') {
                                                 return (
-                                                    <TableCell key={indexC} align={column.align} component={Link} to={`${url}/detalhes?id=${value}`}>
+                                                    <TableCell key={indexC} align={column.align} component={Link} to={`${url}/detalhes?id=${ids[num]}`}>
                                                         {column.format && typeof value === 'number' ? column.format(value) : value}
                                                     </TableCell>
                                                 );

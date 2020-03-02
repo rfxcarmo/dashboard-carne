@@ -44,7 +44,7 @@ export default function FormLogin() {
 
     return (
         <div className={classes.root}>
-                <img src={require('../../../images/logo_branca.png')} height="115" width="167" className={classes.logo}/>
+                <img src={require('../../../images/logo_branca.png')} height="115" width="167" className={classes.logo} alt="iFrigo"/>
                 <form style={{ display : 'flex' , flexDirection : 'column' , alignItems : 'center'}}>
                     <label>Usuario</label><br/>
                     <input type="text" className={classes.formInput}></input><br />

@@ -1,11 +1,11 @@
 import React from 'react'
-import EditIcon from '@material-ui/icons/Edit';
 import AddIcon from '@material-ui/icons/Add';
 import Fab from '@material-ui/core/Fab';
 import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
+import Button from '@material-ui/core/Button';
 import Cadastro from './Cadastro'
 
 const useStyles = makeStyles(theme => ({
@@ -25,7 +25,6 @@ const useStyles = makeStyles(theme => ({
 export default function TransitionsModal({ fun, id }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
-
 
     const handleOpen = () => {
         setOpen(true);
@@ -48,16 +47,11 @@ export default function TransitionsModal({ fun, id }) {
 
     return (
         <div>
-            {fun === 1 ?
+            {fun === 1 ? 
                 <Fab color="primary" aria-label="add" size="small" onClick={handleOpen} style={{ marginRight: '10px', backgroundImage: 'linear-gradient(90deg, #2fcf24 0%, #10640a 100%)' }}>
                     <AddIcon />
                 </Fab> :
-                <Fab
-                    size="small"
-                    color="primary"
-                    aria-label="edit"
-                    style={{ backgroundImage: 'linear-gradient(90deg, #2fcf24 0%, #10640a 100%)' }}
-            ><EditIcon /></Fab> }
+                <Button variant="contained" color="primary" onClick={handleOpen}>Cadastrar</Button> }
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"

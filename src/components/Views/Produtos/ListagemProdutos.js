@@ -8,10 +8,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
-import Button from '@material-ui/core/Button';
-import { Link, useRouteMatch } from 'react-router-dom'
 import Fab from '@material-ui/core/Fab'
-import ButtonGroup from '@material-ui/core/ButtonGroup'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { FiltroProdutoTipoFire , GetFire } from '../../../util/firebase/RequestFire'
@@ -20,8 +17,8 @@ const columns = [
     { id: 'name', label: 'Nome', minWidth: 170 },
     { id: 'VKG', label: 'Valor por KG', minWidth: 100 },
     { id: 'tipo', label: 'Tipo', minWidth: 100 },
-    { id: 'editar', label: '', minWidth: 100 },
-    { id: 'deletar', label: '', minWidth: 100 },
+    { id: 'editar', label: '', maxWidth: 100 },
+    { id: 'deletar', label: '', maxWidth: 100 },
 ];
 
 function createData(name, VKG, tipo, editar, deletar) {
@@ -29,9 +26,9 @@ function createData(name, VKG, tipo, editar, deletar) {
         size="small"
         color="primary"
         aria-label="edit"
-        style={{ backgroundColor: 'rgb(254, 231, 25)' }}
+        style={{ backgroundImage: 'linear-gradient(90deg, #2fcf24 0%, #10640a 100%)'}}
     ><EditIcon /></Fab>
-    deletar = <Fab size="small" color="secondary" aria-label="edit"><DeleteForeverIcon /></Fab>
+    deletar = <Fab size="small" color="secondary" aria-label="edit" style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}><DeleteForeverIcon /></Fab>
     
     return { name, VKG, tipo , editar, deletar} //, population, size, density };
 }
@@ -43,10 +40,27 @@ const useStyles = makeStyles({
     container: {
         maxHeight: 440,
     },
+    divPro : {
+        backgroundColor: '#f2f2f2',
+        borderRadius: '25px',
+        boxShadow: '0 7px 10px rgba(0, 0, 0, .34)',
+        width: '270px',
+        height: '125px',
+        overflow: 'hidden',
+        margin : '20px',
+        display: 'flex',
+        textAlign: 'center',
+        fontSize: '46px',
+        fontWeight: 300,
+        letterSpacing: '4.6px',
+        /* color: #f2f2f2; */
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor : 'pointer'
+    }
 });
 
-export default function StickyHeadTable({ set }) {
-    let { url } = useRouteMatch()
+export default function StickyHeadTable() {
     
     const classes = useStyles();
     const [page, setPage] = React.useState(0);
@@ -64,7 +78,6 @@ export default function StickyHeadTable({ set }) {
     };
 
     React.useEffect(() => {
-        set('PRODUTOS')
             GetFire("produtos").then(data => {
 
                 let rowsAux = []
@@ -100,21 +113,19 @@ export default function StickyHeadTable({ set }) {
     }, [tipo])
 
     return (
-        <div >
-            <div style={{ width : '100%' }}>
-                <ButtonGroup color="secondary" aria-label="outlined secondary button group" style={{ width: '100%' }}>
-                    <Button onClick={() => setTipo('bovino')}>Bovino</Button>
-                    <Button onClick={() => setTipo('suino')}>Suino</Button>
-                    <Button onClick={() => setTipo('aviario')}>Aviario</Button>
-                    <Button onClick={() => setTipo('peixe')}>Peixe</Button>
-                </ButtonGroup>
+        <div >            
+            <div style={{ marginBottom: '10px' }}>
+                <h3 style={{ fontSize: '20px', letterSpacing: '.28px' , color: '#707070'}}>Clique para cadastrar : </h3>
+            </div>
+            <div style={{ width: '100%' }}>
+                <div style={{ display: 'flex', width: '100%' , justifyContent : 'center' }}>
+                    <div className={classes.divPro} onClick={() => setTipo('bovino')}>BOVINO</div>
+                    <div className={classes.divPro} onClick={() => setTipo('suino')} >AVES</div>
+                    <div className={classes.divPro} onClick={() => setTipo('aviario')}>SUINO</div>
+                    <div className={classes.divPro} onClick={() => setTipo('peixe')}>PEIXE</div>
+                </div>
             </div>
             <br />
-            <div style={{ marginBottom: '20px' }}>
-                <Button variant="contained" color="primary" component={Link} to={`${url}/cadastro`}>
-                    Cadastrar
-                </Button>
-            </div>
 
         <Paper className={classes.root}>
             <TableContainer className={classes.container}>
