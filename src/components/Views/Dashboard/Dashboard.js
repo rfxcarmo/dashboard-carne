@@ -32,7 +32,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '15px',
         boxShadow: '0 3px 14px rgba(0, 0, 0, .16)',        
         overflow: 'hidden',
-        width: '1310px',
+        width: '95%',
         height: '392px'
     },
     divSize : {
@@ -40,7 +40,7 @@ const useStyles = makeStyles(theme => ({
         borderRadius: '15px',
         boxShadow: '0 3px 14px rgba(0, 0, 0, .16)',
         overflow: 'hidden',
-        width: '418px',
+        width: '30%',
         height: '300px',
     }
 }));
@@ -55,7 +55,7 @@ export default function Dashboard(){
             </div>
             <div className={classes.divUp}>
                 <div className={classes.divSize}></div>
-                <div className={classes.divSize} style={{marginLeft : '28px' , marginRight : '28px'}}></div>
+                <div className={classes.divSize} style={{marginLeft : '2.5%' , marginRight : '2.5%'}}></div>
                 <div className={classes.divSize}></div>
             </div>            
         </div>

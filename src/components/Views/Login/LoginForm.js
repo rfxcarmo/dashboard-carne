@@ -11,6 +11,7 @@ const useStyles = makeStyles(theme => ({
         overflow: 'hidden',
         transform: 'translate(50%, 10%)',
         color : 'white',
+        mixBlendMode : 'multiply'
     },
     logo : {
         marginTop : '10%',

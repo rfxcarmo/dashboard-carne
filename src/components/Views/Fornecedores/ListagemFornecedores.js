@@ -28,7 +28,8 @@ const columns = [
 function createData(id , name, cnpj, email, telefone) {
     let editar = <Modal fun={0} />    
     
-    let deletar = <Fab size="small" color="secondary" onClick={() => DeleteFire("clientes", id)} aria-label="edit" style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}><DeleteForeverIcon /></Fab>   
+    let deletar = <Fab size="small" color="secondary" onClick={() => DeleteFire("clientes", id)} aria-label="edit" style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}>
+        <DeleteForeverIcon style={{ width : '20px' , height : '20px'}}/></Fab>   
     
     return { id, name, cnpj, email, telefone, editar, deletar};
 }

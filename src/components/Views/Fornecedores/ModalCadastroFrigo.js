@@ -50,14 +50,14 @@ export default function TransitionsModal({ fun, id }) {
         <div>
             {fun === 1 ?
                 <Fab color="primary" aria-label="add" size="small" onClick={handleOpen} style={{ marginRight: '10px', backgroundImage: 'linear-gradient(90deg, #2fcf24 0%, #10640a 100%)' }}>
-                    <AddIcon />
+                    <AddIcon style={{ width: '20px', height: '20px' }} />
                 </Fab> :
                 <Fab
                     size="small"
                     color="primary"
                     aria-label="edit"
                     style={{ backgroundImage: 'linear-gradient(90deg, #2fcf24 0%, #10640a 100%)' }}
-            ><EditIcon /></Fab> }
+                ><EditIcon style={{ width: '20px', height: '20px' }} /></Fab> }
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"

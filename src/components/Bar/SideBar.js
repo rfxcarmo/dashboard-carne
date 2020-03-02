@@ -73,12 +73,20 @@ const useStyles = makeStyles(theme => ({
         fontWeight: 150,
         marginRight: '20px'
     }, 
-    divSocial : {
+    divLogo : {
         display: 'flex', 
         flexDirection: 'column', 
         position: 'absolute', 
-        bottom: '10px', 
+        bottom: '150px', 
         width: '100%', 
+        alignItems: 'center'
+    },
+    divSocial: {
+        display: 'flex',
+        flexDirection: 'column',
+        position: 'absolute',
+        bottom: '10px',
+        width: '100%',
         alignItems: 'center'
     }
 }));
@@ -128,25 +136,28 @@ export default function MiniDrawer() {
                 <Divider />
                 < br/>
                 {open === true ? <Typography className={classes.colorText}
-                    style={{ marginLeft: '36px' }} >Olá, <br />Arthur Weiler!</Typography> : <div></div>}            
+                    style={{ marginLeft: '36px' }} >Olá, <br />Arthur Weiler! <br /> <br /></Typography>  : <div></div>}            
                 <List>
                     {array.map((text, index) => {
                         let path = arrayRoutes[index]
-                        return <ListItem component={Link} to={path} button key={text}>
+                        return <ListItem component={Link} to={path} button key={text} style={{height : "12%"}}>
                             <ListItemIcon className={classes.colorText} >{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
                             <ListItemText className={classes.colorText} primary={text} />
                         </ListItem>
                     })}
-                </List>
-                <Divider />
-                <ListItem button key="Sair">
-                    <ListItemIcon className={classes.colorText} ><MailIcon /></ListItemIcon>
-                    <ListItemText className={classes.colorText} primary="Sair" />
-                </ListItem>
-                {open === true ? <div className={classes.divSocial}>
+                    <Divider />
+                    <ListItem button key="Sair" style={{ height: "12%" }}>
+                        <ListItemIcon className={classes.colorText} ><MailIcon /></ListItemIcon>
+                        <ListItemText className={classes.colorText} primary="Sair" />
+                    </ListItem>
+                </List>                
+                {open === true ? <div className={classes.divLogo}>
                     <img src={require('../../images/logo_branca.png')} height="115" width="167" alt="iFrigo"
                                 ></img> 
-                    <div style={{ marginTop: '100px'}}>
+                </div>
+                    : <p></p>}
+                {open === true ? <div className={classes.divSocial}>
+                    <div>
                         <InstagramIcon className={classes.social} />
                         <TwitterIcon className={classes.social} />
                         <FacebookIcon className={classes.social} />
