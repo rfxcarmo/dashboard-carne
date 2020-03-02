@@ -16,14 +16,14 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function Login(){
+export default function Login({set}){
     const classes = useStyles();
 
     return (
         <div className={classes.root}>
             <TextLogin />
             <div style={{ flex: 1 }}>
-            <FormLogin />
+            <FormLogin set={set}/>
             </div>
         </div>
     )
