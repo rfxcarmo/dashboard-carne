@@ -7,7 +7,7 @@ function App() {
 
   return (
     <div>
-        {i === false ? <Login set={setI} /> : <SideBar />}
+        {i === false ? <Login set={setI} /> : <SideBar set={setI}/>}
 
     </div>
   );

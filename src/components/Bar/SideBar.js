@@ -91,7 +91,7 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function MiniDrawer() {
+export default function MiniDrawer({ set }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
 
@@ -146,7 +146,7 @@ export default function MiniDrawer() {
                         </ListItem>
                     })}
                     <Divider />
-                    <ListItem button key="Sair" style={{ height: "12%" }}>
+                    <ListItem button key="Sair" onClick={() => set(false)} style={{ height: "12%" }}>
                         <ListItemIcon className={classes.colorText} ><MailIcon /></ListItemIcon>
                         <ListItemText className={classes.colorText} primary="Sair" />
                     </ListItem>
