@@ -12,6 +12,12 @@ import Fab from '@material-ui/core/Fab'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { FiltroProdutoTipoFire , GetFire } from '../../../util/firebase/RequestFire'
+import bovino from '../../../images/img_bovina.png'
+import aves from '../../../images/img_aves.png'
+import suino from '../../../images/img_suina.png'
+import peixes from '../../../images/img_peixe.png'
+import { css } from 'styled-components';
+import Modal from './ModalCadastroProduto'
 
 const columns = [
     { id: 'name', label: 'Nome', minWidth: 170 },
@@ -20,6 +26,10 @@ const columns = [
     { id: 'editar', label: '', maxWidth: 100 },
     { id: 'deletar', label: '', maxWidth: 100 },
 ];
+
+const RobotoFont = css`
+  @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+`;
 
 function createData(name, VKG, tipo, editar, deletar) {
     editar = <Fab
@@ -44,7 +54,7 @@ const useStyles = makeStyles({
         backgroundColor: '#f2f2f2',
         borderRadius: '25px',
         boxShadow: '0 7px 10px rgba(0, 0, 0, .34)',
-        width: '270px',
+        width: '25%',
         height: '125px',
         overflow: 'hidden',
         margin : '20px',
@@ -53,10 +63,11 @@ const useStyles = makeStyles({
         fontSize: '46px',
         fontWeight: 300,
         letterSpacing: '4.6px',
-        /* color: #f2f2f2; */
+        color: '#f2f2f2',
         alignItems: 'center',
         justifyContent: 'center',
-        cursor : 'pointer'
+        cursor : 'pointer',
+        fontFamily: 'roboto'
     }
 });
 
@@ -113,20 +124,9 @@ export default function StickyHeadTable() {
     }, [tipo])
 
     return (
-        <div >            
-            <div style={{ marginBottom: '10px' }}>
-                <h3 style={{ fontSize: '20px', letterSpacing: '.28px' , color: '#707070'}}>Clique para cadastrar : </h3>
-            </div>
-            <div style={{ width: '100%' }}>
-                <div style={{ display: 'flex', width: '100%' , justifyContent : 'center' }}>
-                    <div className={classes.divPro} onClick={() => setTipo('bovino')}>BOVINO</div>
-                    <div className={classes.divPro} onClick={() => setTipo('suino')} >AVES</div>
-                    <div className={classes.divPro} onClick={() => setTipo('aviario')}>SUINO</div>
-                    <div className={classes.divPro} onClick={() => setTipo('peixe')}>PEIXE</div>
-                </div>
-            </div>
-            <br />
-
+        <div >
+            <Modal />
+            <br />            
         <Paper className={classes.root}>
             <TableContainer className={classes.container}>
                 <Table stickyHeader aria-label="sticky table">

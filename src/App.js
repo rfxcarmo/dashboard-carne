@@ -7,8 +7,8 @@ function App() {
 
   return (
     <div>
-        {i === false ? <Login set={setI} /> : <SideBar set={setI}/>}
-
+        {/* {i === false ? <Login set={setI} /> : <SideBar set={setI}/>} */}
+      <SideBar />
     </div>
   );
 }

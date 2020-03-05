@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import firebase from '../../../firebase';
 
 const useStyles = makeStyles(theme => ({
@@ -46,24 +47,26 @@ export default function FormLogin({set}) {
     const classes = useStyles();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [msg , setMsg] = useState('')
 
     async function handleSubmit(event) {
+        setMsg(<CircularProgress />)
         event.preventDefault();
 
         await firebase.auth().signInWithEmailAndPassword(email, password).then((user) => {
             if (user.user) {
-                alert('ok')
+                setMsg('ok')
                 set(true)
             }
         }).catch((error) => {
-                if (error.code == 'auth/wrong-password') {
-                    alert('Senha incorreta');
+                if (error.code === 'auth/wrong-password') {
+                    setMsg('Senha incorreta');
 
-                } if (error.code == 'auth/invalid-email') {
-                    alert('Seu e-mail não é valido.');
+                } if (error.code === 'auth/invalid-email') {
+                    setMsg('Seu e-mail não é valido.');
 
-                } if (email == '' || password == '') {
-                    alert('Preencha os campos vazios');
+                } if (email === '' || password === '') {
+                    setMsg('Preencha os campos vazios');
                 }
             })
     }
@@ -79,17 +82,21 @@ export default function FormLogin({set}) {
 
                 <input type="text" className={classes.formInput}
                     value={email}
-                    onChange={event => setEmail(event.target.value)}></input><br />
+                    onChange={event => setEmail(event.target.value)}
+                    style={{ paddingLeft: '10px' }}
+                    ></input><br />
 
                 <label>Senha</label><br />
 
-                <input type="text" className={classes.formInput}
+                <input type="password" className={classes.formInput}
                     value={password}
                     onChange={event => setPassword(event.target.value)}
+                    style={{ paddingLeft : '10px'}}
                 ></input><br /><br />
 
-                <button type="submit" className={classes.formButton}>ENTRAR</button><br />
-                <p>Esqueci minha senha</p>
+                <button type="submit" className={classes.formButton} style={{cursor : 'pointer'}}>ENTRAR</button><br />
+                <p onClick={() => alert('senha recuperada')} style={{cursor : 'pointer'}}>Esqueci minha senha</p>
+                {msg}
 
             </form>
             <div style={{ position: 'absolute', bottom: '15px', width: '100%', textAlign: 'center' }}>

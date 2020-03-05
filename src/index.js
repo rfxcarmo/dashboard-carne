@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import 'typeface-roboto';
 import { BrowserRouter } from 'react-router-dom'
+import { css } from 'styled-components'
+
+const RobotoFont = css`
+  @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+`;
 
 ReactDOM.render(
 <BrowserRouter>
-    <App />
+    <App style={{fonts : RobotoFont}}/>
 </BrowserRouter>
 , document.getElementById('root'));
 
