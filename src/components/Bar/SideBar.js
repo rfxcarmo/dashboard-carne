@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => ({
         display: 'flex', 
         flexDirection: 'column', 
         position: 'absolute', 
-        bottom: '150px', 
+        bottom: '50px', 
         width: '100%', 
         alignItems: 'center'
     },

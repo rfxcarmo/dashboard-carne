@@ -4,6 +4,7 @@ import bovino from '../../../images/img_bovina_cadastro.png'
 import aves from '../../../images/img_aves_cadastro.png'
 import suino from '../../../images/img_suina_cadastro.png'
 import peixes from '../../../images/img_peixe_cadastro.png'
+import { PostFire } from '../../../util/firebase/RequestFire'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles(theme => ({
         backgroundColor: 'white',
         width: '800px',
         height: '400px',
-        borderRadius: '50px',
+        borderRadius: '65px',
         overflow : 'hidden'
     },
     label: {
@@ -28,27 +29,35 @@ const useStyles = makeStyles(theme => ({
         border: '1px solid #e3e3e3',
         overflow: 'hidden',
         margin: '10px',
-        height: '25px'
+        height: '25px',
+        paddingLeft : "10px"
     },
     button: {
         backgroundImage: 'linear-gradient(90deg, #64d260 0%, #3eb365 100%)',
         borderRadius: '5px',
         border: 'none',
-        width: '430px',
+        width: '415px',
         height: '45px',
         overflow: 'hidden',
         cursor: 'pointer',
         fontSize: '18px',
         letterSpacing: '10.8px',
-        color: '#ffffff'
-
+        color: '#ffffff',
+        marginLeft : "12px"
     }
 }));
 
 export default function BasicTextFields({ id , tipo}) {
+    const col = 'produtos'
     const classes = useStyles();
-    const [title, setTitle] = React.useState('')
+    const [ title, setTitle ] = React.useState('')
     const [ bg, setBg ] = React.useState('')
+    const [ data , setData ] = React.useState({
+        "tipoCarne" : '' , 
+        "tipoCorte" : '' , 
+        "nomeCarne" : '',
+        "valorKg" : ''
+    })
 
     React.useEffect( () => {
         switch (tipo) {
@@ -73,6 +82,10 @@ export default function BasicTextFields({ id , tipo}) {
         }
     }, [])
 
+    const add = () => {
+        PostFire(col , data)
+    }
+
     return (
         <form className={classes.root} noValidate autoComplete="off">
                 
@@ -81,36 +94,83 @@ export default function BasicTextFields({ id , tipo}) {
                     backgroundSize: 'cover', 
                     width: '35%' , 
                     height : '100%' , 
-                    position : "relative", 
-                    left : '-8px',
-                    display : 'flex',
-                    alignItems : 'center',
-                    justifyContent : 'center'}}>             
-                <div style={{ fontSize: '95px', fontFamily: 'Roboto', color: 'white', display: 'flex', justifyContent: 'center' }}>{title}</div> 
+                    position : "relative"
+                }}>
+
+                <div style={{backgroundColor : 'rgba(0,0,0, 0.3)', 
+                            width : "100%", 
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                    }}>
+
+                    <div style={{ fontSize: '95px', 
+                                    fontFamily: 'Roboto', 
+                                    color: 'white', 
+                                    display: 'flex', 
+                                    justifyContent: 'center',
+                                    letterSpacing : '15px' }}>{title}</div> 
+                </div>
                 </div>
 
-                <div style={{ padding: '5%', width: '70%' }} >
+                <div style={{ padding: '5%', width: '70%', borderRight : 'rgba( 0, 0, 0, 0.4)'}} >
                     <div style={{display : 'flex '}}>
                     <div style={{ width: '49.5%' }}>
                         <label className={classes.label} >Tipo da Carne</label><br />
-                        <input name="codigo" type='text' className={classes.input}  />
+                        <select id="tipoCarne" className={classes.input} style={{ width : '90%'}} >
+                            <option value="bovina">Bovina</option>
+                            <option value="aves">Aves</option>
+                            <option value="suina">Suina</option>
+                            <option value="peixes">Peixes</option>
+                        </select>
                     </div>
+
                     {tipo === 'bovino' ? <div style={{ width: '49.5%' }}>
                         <label className={classes.label} >Tipo de corte</label><br />
-                        <input name="codigo" type='text' className={classes.input} />
-                    </div> : <div></div> }
-                    
+                        <div className={classes.label}> 
+                            <label>1ª</label>
+                            <input type="radio" id="pr" name="tipoCorte" value="" style={{}}/>
+                            <label>2ª</label>
+                            <input type="radio" id="sc" name="tipoCorte" value="" style={{}}/>
+                        </div>
+                    </div> : <div></div> }                    
                     </div>
-                    <div style={{ width: '100%' }}>
+
+                    <div style={{ width: '95%' }}>
                         <label className={classes.label} >Nome da Carne </label><br />
-                    <input name="codigo" type='text' className={classes.input} style={{ width: '98%' , backgroundColor : 'red'}}/>
+                        <input name="codigo" type='text' className={classes.input} style={{
+                            width: '90%', 
+                            backgroundColor: '#620c0c',
+                            color: 'white'}}
+                            
+                            onInput={e => setData({
+                                "tipoCarne": data.tipoCarne,
+                                "tipoCorte": data.tipoCorte,
+                                "nomeCarne": e.target.value,
+                                "valorKg": data.valorKg
+                            })}
+                            />
                     </div>
-                    <div style={{ width: '100%' }}>
+
+                    <div style={{ width: '95%' }}>
                         <label className={classes.label} >Valor por KG</label><br />
-                    <input name="codigo" type='text' className={classes.input} style={{ width: '98%', backgroundColor: 'red'}} />
+                        <input name="codigo" type='text' className={classes.input} style={{
+                            width: '90%', 
+                            backgroundColor: '#620c0c',
+                            color: 'white'}} 
+                            
+                            onInput={e => setData({
+                                "tipoCarne": data.tipoCarne,
+                                "tipoCorte": data.tipoCorte,
+                                "nomeCarne": data.nomeCarne,
+                                "valorKg": e.target.value
+                            })}
+                        />
                     </div>
+
                     <br />
-                    <button type="button" className={classes.button}>
+                    <button type="button" className={classes.button} onClick={() => add()}>
                         CADASTRAR CARNE
                     </button>
                 </div>                           

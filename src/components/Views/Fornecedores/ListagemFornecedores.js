@@ -99,7 +99,7 @@ export default function StickyHeadTable() {
                                 let num = index
                                 console.log(ids)
                                 return (
-                                    <TableRow hover role="checkbox" tabIndex={-1} key={index} >
+                                    <TableRow hover role="checkbox" tabIndex={-1} key={index} style={{height : '50px'}} >
                                         {columns.map((column , indexC) => {
                                             const value = row[column.id];
                                             if (column.id === 'name') {
