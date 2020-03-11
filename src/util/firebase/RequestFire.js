@@ -1,4 +1,7 @@
 import firebase from '../../firebase'
+const database = firebase.database();
+
+
 
 export function GetFire( col ) {
     return new Promise((resolve, reject) => {
