@@ -11,13 +11,9 @@ import TableRow from '@material-ui/core/TableRow';
 import Fab from '@material-ui/core/Fab'
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
-import { FiltroProdutoTipoFire , GetFire } from '../../../util/firebase/RequestFire'
-import bovino from '../../../images/img_bovina.png'
-import aves from '../../../images/img_aves.png'
-import suino from '../../../images/img_suina.png'
-import peixes from '../../../images/img_peixe.png'
-import { css } from 'styled-components';
+import { get , del } from '../../../util/firebase/RequestFire'
 import Modal from './ModalCadastroProduto'
+import ModalEditar from './ModalEditarProduto'
 
 const columns = [
     { id: 'name', label: 'Nome', minWidth: 170 },
@@ -27,20 +23,13 @@ const columns = [
     { id: 'deletar', label: '', maxWidth: 100 },
 ];
 
-const RobotoFont = css`
-  @import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
-`;
 
-function createData(name, VKG, tipo, editar, deletar) {
-    editar = <Fab
-        size="small"
-        color="primary"
-        aria-label="edit"
-        style={{ backgroundImage: 'linear-gradient(90deg, #2fcf24 0%, #10640a 100%)'}}
-    ><EditIcon /></Fab>
-    deletar = <Fab size="small" color="secondary" aria-label="edit" style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}><DeleteForeverIcon /></Fab>
+function createData(name, VKG, tipo, funDel, id  , att ) {
+    let editar = <ModalEditar fun={att} id={id}/>
+    let deletar = <Fab size="small" color="secondary" aria-label="edit" onClick={() => funDel(id)}
+    style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}><DeleteForeverIcon /></Fab>
     
-    return { name, VKG, tipo , editar, deletar} //, population, size, density };
+    return { name, VKG, tipo , editar , deletar}
 }
 
 const useStyles = makeStyles({
@@ -88,44 +77,28 @@ export default function StickyHeadTable() {
         setPage(0);
     };
 
+    const atualiza = () => {
+        get().then(s => {
+            //console.log(Object.keys(s.produtos))
+            let arrayAux = []
+            Object.values(s.produtos).map((map, index) => 
+            arrayAux.push(createData(map.nome, `R$ ${parseFloat(map.valor)}`, map.tipo, dele, Object.keys(s.produtos)[index], atualiza))
+            )
+            setRows(arrayAux)
+        })
+    }
+
+    const dele = (id) => {
+        del(id).then(s => atualiza())        
+    }
+
     React.useEffect(() => {
-            GetFire("produtos").then(data => {
-
-                let rowsAux = []
-                data.docs.map(map => 
-                    rowsAux.push(map.data())
-                )
-
-                let arrayAux = []
-                rowsAux.map(map => 
-                    arrayAux.push(createData(map.nome, map.valor, map.tipo))
-                )
-                setRows(arrayAux)
-
-            })
+            atualiza()
     }, [])
-
-    React.useEffect(() => {
-        if(tipo !== ''){
-            FiltroProdutoTipoFire("produtos", tipo).then(data => {
-
-                let rowsAux = []
-                data.docs.map(map =>
-                    rowsAux.push(map.data())
-                )
-
-                let arrayAux = []
-                rowsAux.map(map =>
-                    arrayAux.push(createData(map.nome, map.valor, map.tipo))
-                )
-                setRows(arrayAux)
-            })
-        }
-    }, [tipo])
 
     return (
         <div >
-            <Modal />
+            <Modal fun={atualiza}/>
             <br />            
         <Paper className={classes.root}>
             <TableContainer className={classes.container}>
