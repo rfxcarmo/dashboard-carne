@@ -4,7 +4,7 @@ import bovino from '../../../images/img_bovina_cadastro.png'
 import aves from '../../../images/img_aves_cadastro.png'
 import suino from '../../../images/img_suina_cadastro.png'
 import peixes from '../../../images/img_peixe_cadastro.png'
-import { PostFire } from '../../../util/firebase/RequestFire'
+import { add } from '../../../util/firebase/RequestFire'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -47,33 +47,33 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function BasicTextFields({ id , tipo}) {
+export default function BasicTextFields({ fun , tipo , close}) {
     const col = 'produtos'
     const classes = useStyles();
     const [ title, setTitle ] = React.useState('')
     const [ bg, setBg ] = React.useState('')
     const [ data , setData ] = React.useState({
-        "tipoCarne" : '' , 
+        "tipo" : tipo , 
         "tipoCorte" : '' , 
-        "nomeCarne" : '',
-        "valorKg" : ''
+        "nome" : '',
+        "valor" : ''
     })
 
     React.useEffect( () => {
         switch (tipo) {
-            case 'bovino':
+            case 'Bovina':
                 setTitle(<h>BO/ <br /> /VI <br /> NA/</h>)
                 setBg(bovino)
                 break;
-            case 'aves':
+            case 'Aves':
                 setTitle(<h>AV/ <br /> /ES</h>)
                 setBg(aves)
                 break;
-            case 'suino':
+            case 'Suina':
                 setTitle(<h>SU/ <br /> /IN <br /> OS/</h>)
                 setBg(suino)
                 break;
-            case 'peixes':
+            case 'Peixes':
                 setTitle(<h>PE/ <br /> /I/ <br /> XE/</h>)
                 setBg(peixes)
                 break;        
@@ -82,8 +82,12 @@ export default function BasicTextFields({ id , tipo}) {
         }
     }, [])
 
-    const add = () => {
-        PostFire(col , data)
+    const addFire = (data) => {
+        add('produtos', data).then(s => {
+            alert('Cadastrado com sucesso')
+            fun()
+            close()
+        })
     }
 
     return (
@@ -117,22 +121,38 @@ export default function BasicTextFields({ id , tipo}) {
                 <div style={{ padding: '5%', width: '70%', borderRight : 'rgba( 0, 0, 0, 0.4)'}} >
                     <div style={{display : 'flex '}}>
                     <div style={{ width: '49.5%' }}>
+
                         <label className={classes.label} >Tipo da Carne</label><br />
-                        <select id="tipoCarne" className={classes.input} style={{ width : '90%'}} >
-                            <option value="bovina">Bovina</option>
-                            <option value="aves">Aves</option>
-                            <option value="suina">Suina</option>
-                            <option value="peixes">Peixes</option>
+                        <select id="tipoCarne" className={classes.input} style={{ width : '90%' }} 
+                            disabled >
+                            {tipo === 'Bovina' ? <option value="Bovina" selected >Bovina</option> : <option value="Bovina" disabled>Bovina</option>}
+                            {tipo === 'Aves' ? <option value="Aves" selected >Aves</option> : <option value="Aves" disabled>Aves</option>}
+                            {tipo === 'Suina' ? <option value="Suina" selected >Suina</option> : <option value="Suina" disabled>Suina</option>}
+                            {tipo === 'Peixes' ? <option value="Peixes" selected >Peixes</option> : <option value="Peixes" disabled>Peixes</option>}    
                         </select>
                     </div>
-
+                    
                     {tipo === 'bovino' ? <div style={{ width: '49.5%' }}>
                         <label className={classes.label} >Tipo de corte</label><br />
                         <div className={classes.label}> 
                             <label>1ª</label>
-                            <input type="radio" id="pr" name="tipoCorte" value="" style={{}}/>
+                            <input type="radio" id="pr" name="tipoCorte" value="1" 
+                                onClick={e => setData({
+                                    "tipo": data.tipo,
+                                    "tipoCorte": e.target.value,
+                                    "nome": data.nome,
+                                    "valor": data.valor
+                                        })}
+                            style={{}}/>
                             <label>2ª</label>
-                            <input type="radio" id="sc" name="tipoCorte" value="" style={{}}/>
+                            <input type="radio" id="sc" name="tipoCorte" value="2" 
+                                onClick={e => setData({
+                                    "tipo": data.tipo,
+                                    "tipoCorte": e.target.value,
+                                    "nome": data.nome,
+                                    "valor": data.valor
+                                })}
+                            style={{}}/>
                         </div>
                     </div> : <div></div> }                    
                     </div>
@@ -145,32 +165,32 @@ export default function BasicTextFields({ id , tipo}) {
                             color: 'white'}}
                             
                             onInput={e => setData({
-                                "tipoCarne": data.tipoCarne,
+                                "tipo": data.tipo,
                                 "tipoCorte": data.tipoCorte,
-                                "nomeCarne": e.target.value,
-                                "valorKg": data.valorKg
+                                "nome": e.target.value,
+                                "valor": data.valor
                             })}
                             />
                     </div>
 
                     <div style={{ width: '95%' }}>
                         <label className={classes.label} >Valor por KG</label><br />
-                        <input name="codigo" type='text' className={classes.input} style={{
+                        <input name="codigo" type='number' className={classes.input} style={{
                             width: '90%', 
                             backgroundColor: '#620c0c',
                             color: 'white'}} 
                             
                             onInput={e => setData({
-                                "tipoCarne": data.tipoCarne,
+                                "tipo": data.tipo,
                                 "tipoCorte": data.tipoCorte,
-                                "nomeCarne": data.nomeCarne,
-                                "valorKg": e.target.value
+                                "nome": data.nome,
+                                "valor": e.target.value
                             })}
                         />
                     </div>
 
                     <br />
-                    <button type="button" className={classes.button} onClick={() => add()}>
+                <button type="button" className={classes.button} onClick={() => addFire(data)}>
                         CADASTRAR CARNE
                     </button>
                 </div>                           

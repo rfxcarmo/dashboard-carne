@@ -7,7 +7,9 @@ import { makeStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import Backdrop from '@material-ui/core/Backdrop';
 import Fade from '@material-ui/core/Fade';
-import Cadastro from './Cadastro'
+import Editar from './Editar'
+import Fab from '@material-ui/core/Fab'
+import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles(theme => ({
     modal: {
@@ -42,14 +44,13 @@ const useStyles = makeStyles(theme => ({
     }
 }));
 
-export default function TransitionsModal({ fun }) {
+export default function TransitionsModal({ fun, id }) {
     const classes = useStyles();
     const [open, setOpen] = React.useState(false);
     const [tipo, setTipo] = React.useState('')
 
 
-    const handleOpen = ( cTipo ) => {
-        setTipo(cTipo)
+    const handleOpen = () => {
         setOpen(true);
     };
 
@@ -70,17 +71,13 @@ export default function TransitionsModal({ fun }) {
 
     return (
         <div>
-            <div style={{ marginBottom: '10px' }}>
-                <h3 style={{ fontSize: '20px', letterSpacing: '.28px', color: '#707070' }}>Clique para cadastrar : </h3>
-            </div>
-            <div style={{ width: '100%' }}>
-                <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                    <div className={classes.divPro} onClick={() => handleOpen('Bovina')} style={{ backgroundImage: `url(${bovino})`, backgroundSize: 'cover' }}>BOVINO</div>
-                    <div className={classes.divPro} onClick={() => handleOpen('Aves')} style={{ backgroundImage: `url(${aves})`, backgroundSize: 'cover' }} >AVES</div>
-                    <div className={classes.divPro} onClick={() => handleOpen('Suina')} style={{ backgroundImage: `url(${suino})`, backgroundSize: 'cover' }} >SUINO</div>
-                    <div className={classes.divPro} onClick={() => handleOpen('Peixes')} style={{ backgroundImage: `url(${peixes})`, backgroundSize: 'cover' }} >PEIXE</div>
-                </div>
-            </div>
+            <Fab
+                size="small"
+                color="primary"
+                aria-label="edit"
+                style={{ backgroundImage: 'linear-gradient(90deg, #2fcf24 0%, #10640a 100%)' }}
+                onClick={() => handleOpen()}
+            ><EditIcon /></Fab>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
@@ -94,7 +91,7 @@ export default function TransitionsModal({ fun }) {
                 }}
             >
                 <Fade in={open}>
-                    <Cadastro fun={fun} tipo={tipo} close={handleClose}/>
+                    <Editar fun={fun} id={id} close={handleClose}/>
                 </Fade>
             </Modal>
         </div>

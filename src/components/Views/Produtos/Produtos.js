@@ -34,18 +34,25 @@ const useStyles = makeStyles({
 
 export default function Clientes() {
     const classes = useStyles();
+    const [ busca , setBusca] = React.useState('')
 
     return (
         <div style={{ padding: '50px' , display : 'flex' , flexDirection : 'column' , justifyContent : 'center'}}>
             <div style={{display: 'flex', width:'100%', justifyContent : 'center'}}>
                 <div className={classes.divInputBusca}>
-                    <input type="text" placeholder="Buscar produto..." className={classes.inputBusca}></input>
+                    <input type="text" placeholder="Buscar produto..." 
+                    className={classes.inputBusca}
+                    onInput={e => {
+                        setBusca(e.target.value)
+                    }
+                    }
+                    ></input>
                     <SearchIcon style ={{fontWeight : 300 , fontSize : '42px'}}/>
                 </div>
             </div>
             <br />
             <div>
-                <ListagemProdutos />                        
+                <ListagemProdutos busca={busca}/>                        
             </div>
         </div>
     )
