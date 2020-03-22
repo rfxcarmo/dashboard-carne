@@ -10,29 +10,38 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Fab from '@material-ui/core/Fab';
 import { Link, useRouteMatch } from 'react-router-dom'
-import Modal from './ModalCadastroFrigo'
+import { get, del } from '../../../util/firebase/RequestFire'
+import { buscador } from '../../../util/Busca';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { GetFire, DeleteFire} from '../../../util/firebase/RequestFire'
+import Modal from './ModalCadastroFrigo'
 
 
 const columns = [
-    { id: 'id', label: 'ID', minWidth: 100 },
     { id: 'name', label: 'Nome', minWidth: 170 },
     { id: 'cnpj', label: 'CNPJ', minWidth: 100 },
     { id: 'email', label: 'Email', minWidth: 100 },
-    { id: 'telefone', label: 'Telefone', minWidth: 100 },
+    { id: 'bairro', label: 'Bairro', minWidth: 100 },
     { id: 'editar', label: '', minWidth: 100 },
     { id: 'deletar', label: '', minWidth: 100 },    
 ];
 
-function createData(id , name, cnpj, email, telefone) {
+function createData(name, cnpj, email, bairro) {
     let editar = <Modal fun={0} />    
     
-    let deletar = <Fab size="small" color="secondary" onClick={() => DeleteFire("clientes", id)} aria-label="edit" style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}>
+    let deletar = <Fab size="small" color="secondary" aria-label="edit" style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}>
         <DeleteForeverIcon style={{ width : '20px' , height : '20px'}}/></Fab>   
     
-    return { id, name, cnpj, email, telefone, editar, deletar};
+    return { name, cnpj, email, bairro, editar, deletar};
 }
+
+// function createData(name, VKG, tipo, funDel, id, att) {
+//     let editar = <ModalEditar fun={att} id={id} />
+//     let deletar = <Fab size="small" color="secondary" aria-label="edit" onClick={() => funDel(id)}
+//         style={{ backgroundImage: 'linear-gradient(90deg, #c21616 0%, #630c0c 100%)' }}><DeleteForeverIcon /></Fab>
+
+//     return { name, VKG, tipo, editar, deletar }
+// }
 
 const useStyles = makeStyles({
     root: {
@@ -61,19 +70,43 @@ export default function StickyHeadTable() {
         setPage(0);
     };
     
-    React.useEffect(() => {
-        GetFire("clientes").then(data => {
-            data.docs.map(m => ids.push(m.id))            
-            console.log(ids)
-
-            let rowsAux = []
-            data.docs.map( map => rowsAux.push(map.data()))
-            
+    const atualiza = () => {
+        get().then(s => {
             let arrayAux = []
-            rowsAux.map((map, i) => arrayAux.push(createData(ids[i], map.nome, map.cnpj, map.email, map.telefone)))
-            
-            setRows(arrayAux)       
+            Object.values(s.fornecedores).map((map, index) =>
+                arrayAux.push(createData(map.nomeFornecedor, map.CNPJ , map.Email , map.bairro))
+                //console.log(map)
+            )
+            setRows(arrayAux)
         })
+    }
+
+    // const funBusca = (busca) => {
+    //     get().then(s => {
+    //         buscador(busca, Object.values(s.produtos)).then(b => {
+    //             let arrayAux = []
+    //             b.map((map, index) =>
+    //                 arrayAux.push(createData(map.nome, `R$ ${parseFloat(map.valor)}`, map.tipo, dele, Object.keys(s.produtos)[index], atualiza))
+    //             )
+    //             setRows(arrayAux)
+    //         })
+
+    //     })
+    // }
+
+    // const dele = (id) => {
+    //     del(id).then(s => atualiza())
+    // }
+    // React.useEffect(() => {
+    //     if (busca !== '') {
+    //         funBusca(busca)
+    //     } else {
+    //         atualiza()
+    //     }
+    // }, [busca])
+
+    React.useEffect(() => {
+        atualiza()
     }, [])
 
     return (
@@ -96,19 +129,10 @@ export default function StickyHeadTable() {
                         </TableHead>
                         <TableBody>
                             {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index)=> {
-                                let num = index
-                                console.log(ids)
                                 return (
                                     <TableRow hover role="checkbox" tabIndex={-1} key={index} style={{height : '50px'}} >
                                         {columns.map((column , indexC) => {
                                             const value = row[column.id];
-                                            if (column.id === 'name') {
-                                                return (
-                                                    <TableCell key={indexC} align={column.align} component={Link} to={`${url}/detalhes?id=${ids[num]}`}>
-                                                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                    </TableCell>
-                                                );
-                                            }
                                             return (
                                                 <TableCell key={indexC} align={column.align} >
                                                     {column.format && typeof value === 'number' ? column.format(value) : value}

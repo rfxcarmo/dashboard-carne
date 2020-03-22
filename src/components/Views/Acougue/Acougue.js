@@ -35,21 +35,38 @@ const useStyles = makeStyles({
 
 export default function Clientes() {
     const classes = useStyles();
+    const [busca, setBusca] = React.useState('')
+    const [ att , setAtt ] = React.useState(false)
+
+    // React.useEffect(() => {
+    //     setAtt('Arroz')
+    // }, [])
+
+    // React.useEffect(() => {
+    //     console.log(att)
+    // }, [att])
 
     return (
-        <div style={{ padding: '50px' }}>
+        <div style={{ padding: '50px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
             <div style={{ display: 'flex', width: '100%', justifyContent: 'center' }}>
-                <Modal fun={1}/>
+                <Modal set={setAtt}/>
                 <div className={classes.divInputBusca}>
-                    <input type="text" placeholder="Buscar açougue..." className={classes.inputBusca}></input>
+                    <input type="text" placeholder="Buscar produto..."
+                        className={classes.inputBusca}
+                        onInput={e => {
+                            setBusca(e.target.value)
+                        }
+                        }
+                    ></input>
                     <SearchIcon style={{ fontWeight: 300, fontSize: '42px' }} />
+
                 </div>
             </div>
             <br />
-            <br />
             <div>
-                <ListagemAcougues />
+                <ListagemAcougues busca={busca} att={att}/>
             </div>
+            
         </div>
     )
 }

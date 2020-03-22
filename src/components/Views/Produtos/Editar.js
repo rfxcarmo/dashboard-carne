@@ -60,7 +60,7 @@ export default function BasicTextFields({ fun, id , close}) {
     })
 
     React.useEffect(() => {
-        getS( id )
+        getS( 'produtos' , id )
         .then(s => {
             setData(s)
             switch (s.tipo) {
@@ -87,7 +87,7 @@ export default function BasicTextFields({ fun, id , close}) {
     }, [])
 
     const updateFire = (data) => {
-        update(id, data ,'produtos').then(s => {
+        update(id, data, '/produtos/').then(s => {
             alert('Editado com sucesso')
             fun()
             close()

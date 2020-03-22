@@ -57,17 +57,6 @@ export default function TransitionsModal({ fun }) {
         setOpen(false);
     };
 
-    // React.useEffect(() => {
-    //     if (id !== null) {
-    //         DetalheFire("clientes", id)
-    //             .then(d => {
-    //                 let view = d.data()
-    //                 setData({ nome: view.nome, cnpj: view.cnpj, email: view.email, telefone: view.telefone })
-    //                 console.log(data)
-    //             })
-    //     }
-    // }, [])
-
     return (
         <div>
             <div style={{ marginBottom: '10px' }}>

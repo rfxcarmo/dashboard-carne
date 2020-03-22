@@ -9,7 +9,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableRow from '@material-ui/core/TableRow';
 import Fab from '@material-ui/core/Fab'
-import { buscador } from './Busca';
+import { buscador } from '../../../util/Busca';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import { get , del } from '../../../util/firebase/RequestFire'
 import Modal from './ModalCadastroProduto'
@@ -66,7 +66,6 @@ export default function StickyHeadTable({ busca }) {
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const [rows, setRows] = React.useState([])
-    const [tipo , setTipo] = React.useState('')
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -79,7 +78,6 @@ export default function StickyHeadTable({ busca }) {
 
     const atualiza = () => {
         get().then(s => {
-            //console.log(Object.keys(s.produtos))
             let arrayAux = []
             Object.values(s.produtos).map((map, index) => 
             arrayAux.push(createData(map.nome, `R$ ${parseFloat(map.valor)}`, map.tipo, dele, Object.keys(s.produtos)[index], atualiza))
@@ -90,19 +88,19 @@ export default function StickyHeadTable({ busca }) {
 
     const funBusca = ( busca ) => {
         get().then(s => {
-            let buscado = buscador(busca, Object.values(s.produtos))
-            let arrayAux = []
-
-            console.log(buscado)
-            buscado.map((map, index) =>
-                arrayAux.push(createData(map.nome, `R$ ${parseFloat(map.valor)}`, map.tipo, dele, Object.keys(s.produtos)[index], atualiza))
-            )
-            setRows(arrayAux)
+            buscador(busca, Object.values(s.produtos)).then( b => {
+                let arrayAux = []
+                b.map((map, index) =>
+                    arrayAux.push(createData(map.nome, `R$ ${parseFloat(map.valor)}`, map.tipo, dele, Object.keys(s.produtos)[index], atualiza))
+                )
+                setRows(arrayAux)
+            })
+            
         })
     }
 
     const dele = (id) => {
-        del(id).then(s => atualiza())        
+        del('/produtos/' , id).then(s => atualiza())        
     }
     React.useEffect(() => {
         if(busca !== ''){ 

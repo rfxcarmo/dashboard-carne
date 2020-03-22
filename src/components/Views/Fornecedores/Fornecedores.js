@@ -3,7 +3,6 @@ import ListagemClientes from './ListagemFornecedores';
 import { makeStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import Modal from './ModalCadastroFrigo'
-import DetalhesFrigo from './DetalhesFrigo'
 import { Switch, Route , useRouteMatch } from "react-router-dom"
 
 const useStyles = makeStyles({
@@ -56,9 +55,6 @@ export default function Clientes(){
                         <br />
                         <ListagemClientes />
                         </div>                        
-                    </Route>
-                    <Route path={`${path}/detalhes`}>
-                        <DetalhesFrigo />
                     </Route>
                 </Switch>
             </div>

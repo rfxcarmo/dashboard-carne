@@ -1,49 +1,7 @@
 import firebase from '../../firebase'
 const database = firebase.database();
 
-var database = firebase.database();
-
-export function GetFire( col ) {
-    return new Promise((resolve, reject) => {
-        const db = firebase.firestore()
-        const data = db.collection(col).get()
-        resolve(data)
-    })
-}
-
-export function PostFire(col, contato) {
-    const db = firebase.firestore()
-    db.collection(col).add(contato)
-}
-
-export function UpdateFire(col, id, contato) {
-    const db = firebase.firestore()
-    return db.collection(col).doc(id).update(contato)
-}
-
-export function DeleteFire(col, id) {
-    const db = firebase.firestore()
-    return db.collection(col).doc(id).delete()
-}
-
-export function FiltroProdutoTipoFire(col , tipo) {
-    return new Promise((resolve, reject) => {
-        const db = firebase.firestore()
-        const data = db.collection(col).where("tipo", "==", tipo).get()
-        resolve(data)
-    })
-}
-
-export function DetalheFire(col, id) {
-    return new Promise((resolve, reject) => {
-        const db = firebase.firestore()
-        const data = db.collection(col).doc(id).get()
-        resolve(data)
-    })
-}
-
 export const add = (col , data) => {
-
     return new Promise( (resolve, reject) => {
         const fref = database.ref()
         const id_carne = fref.child(col).push().key
@@ -54,12 +12,11 @@ export const add = (col , data) => {
         fref.update(update)
         resolve('ok')
     })
-
 }
 
 export const update = (ref, nome , col) => {
     return new Promise((resolve, reject) => {
-        let fref = database.ref('/produtos/')
+        let fref = database.ref(col)
 
         let update = {}
         update[ref] = nome
@@ -69,40 +26,55 @@ export const update = (ref, nome , col) => {
     })    
 }
 
-export const get = ( ) => {
+export const get = ( col ) => {
     return new Promise((resolve, reject) => {
         const fref = database.ref()
 
         fref.once('value').then(s => {
-            let produtos = s.val()
-
-            resolve(produtos)
-            //Object.keys(produtos.produtos)
+            let value = s.val()
+            resolve(value)
         })
     })    
 }
 
-export const getS = ( id  ) => {
+export const getS = (col, id  ) => {
     return new Promise((resolve, reject) => {
         const fref = database.ref()
 
         fref.once('value').then(s => {
-            let produtos = s.val()
+            let val = s.val()
 
-            Object.keys(produtos.produtos).map( (s , index) => {
-                if(s === id){
-                    resolve(Object.values(produtos.produtos)[index])
-                }
-            })         
-
+            switch(col){
+                case 'produtos' :
+                    Object.keys(val.produtos).map((s, index) => {
+                        if (s === id) {
+                            resolve(Object.values(val.produtos)[index])
+                        }
+                    })
+                break
+                case 'clientes' : 
+                    Object.keys(val.clientes).map((s, index) => {
+                        if (s === id) {
+                            resolve(Object.values(val.clientes)[index])
+                        }
+                    })
+                break
+                case 'fornecedores':
+                    Object.keys(val.fornecedores).map((s, index) => {
+                        if (s === id) {
+                            resolve(Object.values(val.fornecedores)[index])
+                        }
+                    })
+                    break
+            }                
         })
     }) 
 }
 
-export const del = ( ref ) => {
+export const del = (col, ref ) => {
     return new Promise((resolve, reject) => {
 
-        let fref = database.ref('/produtos/' + ref)
+        let fref = database.ref(col + ref)
         fref.remove()
         resolve('deletado')
 
