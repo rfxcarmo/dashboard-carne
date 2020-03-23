@@ -139,7 +139,7 @@ export default function BasicTextFields({ fun , id , close }) {
                     <div>
                         <label className={classes.label} >Bairro</label><br />
                         <input name="codigo" type='text' className={classes.input} style={{ width: '430px' }} 
-                            onInput={e => setModel({ ...produto, ['bairro']: e.target.value })} value={model.bairro}/>
+                            onInput={e => setModel({ ...model, ['bairro']: e.target.value })} value={model.bairro}/>
                     </div>
                     <div>
                         <label className={classes.label} >Telefone</label><br />

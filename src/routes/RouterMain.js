@@ -5,6 +5,7 @@ import Fornecedores from '../components/Views/Fornecedores/Fornecedores'
 import Produtos from '../components/Views/Produtos/Produtos'
 import Acougue from '../components/Views/Acougue/Acougue'
 import Login from '../components/Views/Login/Login'
+import Pedidos from '../components/Views/Pedidos/Pedidos'
 
 
 export default function RouterMain(){
@@ -24,7 +25,7 @@ export default function RouterMain(){
                     <Acougue />
                 </Route>
                 <Route path="/pedidos">
-                    <h1>Pedidos</h1>
+                    <Pedidos />
                 </Route>
                 <Route exact path="/login">
                     <Login />
