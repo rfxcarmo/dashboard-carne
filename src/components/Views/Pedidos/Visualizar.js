@@ -1,6 +1,7 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { update, getS , add} from '../../../util/firebase/RequestFire'
+import Confirmado from './Confirmado'
 
 
 const useStyles = makeStyles(theme => ({
@@ -12,20 +13,17 @@ const useStyles = makeStyles(theme => ({
         // width: '1093px',
         // height: '662px',
         borderRadius: '50px',
-        padding: '50px'
+        padding: '50px',
+        fontFamily : 'Roboto'
     },
     divModal: {
-        margin : '5px',
         marginRight : '2.5px',
-        marginLeft : '2.5px'
-
+        marginLeft : '2.5px',
+        flex : 1
     },
-    input: {
-        borderRadius: '4.25px',
-        border: '1px solid #e3e3e3',
-        overflow: 'hidden',
-        margin: '10px',
-        height: '25px'
+    font: {
+        letterSpacing: '.7px',
+        color: '#707070'
     },
     button: {
         backgroundImage: 'linear-gradient(90deg, #64d260 0%, #3eb365 100%)',
@@ -44,54 +42,65 @@ const useStyles = makeStyles(theme => ({
 
 export default function BasicTextFields({ fun, id, close }) {
     const classes = useStyles();
-    const [model, setModel] = React.useState({})
+    const [conf, setConf] = React.useState(false)
 
-    React.useEffect(() => {
-        console.log(id)
-        getS('clientes', id)
-            .then(s => {
-                setModel(s)
-                console.log(s)
-            })
-    }, [])
-
-    const updateFire = (data) => {
-        update(id, data, '/clientes/').then(s => {
-            alert('Editado com sucesso')
-            fun()
-            close()
-        })
+    const confirma = () => {
+        setConf(true)
     }
 
     return (
         <div className={classes.root}>
-            <h1>Detalhes do Pedidos</h1>
-            <div style={{ display : 'flex'}}>
+            {conf === false ? <div>
+            <p style={{ fontSize: '30px', fontWeight: '500' , color : '#c64031'}}>Detalhes do Pedidos</p>            
+            <div style={{ display : 'flex' , width : '100%'}}>
                 <div className={classes.divModal} style={{ marginRight: '10px'}}>
-                    <h2># Numero do Pedido : <br /> Valor</h2>
-                    <h2># Numero do Pedido : <br /> Valor</h2>
+                    <p className={classes.font} style={{ fontSize: '20px', fontWeight: '700'}}>
+                        # Numero do Pedido : 
+                    <p style={{ fontSize: '18px' , marginTop : '5px', fontWeight: '400'}}>Valor</p>
+                    </p>
+                    <p className={classes.font} style={{ fontSize: '20px', fontWeight: '700' }}>
+                        # Numero do Pedido :
+                    <p style={{ fontSize: '18px' , marginTop : '5px', fontWeight: '400'}}>Valor</p>
+                    </p>
                 </div>
                 <div className={classes.divModal} style={{ marginLeft: '10px' }}>
-                    <h2># Numero do Pedido : <br /> Valor</h2>
-                    <h2># Numero do Pedido : <br /> Valor</h2>
+                    <p className={classes.font} style={{ fontSize: '20px', fontWeight: '700' }}>
+                        # Numero do Pedido :
+                    <p style={{ fontSize: '18px' , marginTop : '5px', fontWeight: '400'}}>Valor</p>
+                    </p>
+                    <p className={classes.font} style={{ fontSize: '20px', fontWeight: '700' }}>
+                        # Numero do Pedido :
+                    <p style={{ fontSize: '18px' , marginTop : '5px', fontWeight: '400'}}>Valor</p>
+                    </p>
                 </div>
             </div>
+            <hr style={{ size : '2px' , color : 'black'}}/>
             <br />
-            <div style={{ padding: '1px' , }}>
-                <div style={{display: 'flex' , flexDirection : 'column' , textAlign : 'initial'}}>
-                    <h2>End. Entrega: <br /> Valor</h2>
-                    <br />
-                    <h2>Prazo: <br /> Valor</h2>
+            <div style={{ padding: '1px' , width : '100%' }}>
+                <div style={{display: 'flex' , flexDirection : 'column' , justifyContent : 'initial'}}>
+                    <p className={classes.font} style={{ fontSize: '20px', fontWeight: '700' , marginBottom : '3px'}}>
+                        End. de Cobrança :
+                    <p style={{ fontSize: '18px', marginTop: '5px', fontWeight: '400' }}>Valor</p>
+                    </p>
+                    <p className={classes.font} style={{ fontSize: '20px', fontWeight: '700' , marginTop : '3px'}}>
+                        Prazo :
+                    <p style={{ fontSize: '18px', marginTop: '5px', fontWeight: '400' }}>Valor</p>
+                    </p>
                 </div>                
                 <br />
-                <div>
-                    <h2>Prazo:  Valor</h2>
+                <div style={{display : 'flex' }}>
+                    <div style={{ display : 'flex' , flex : 1, justifyContent : 'initial'}}>
+                        <p className={classes.font} style={{ fontSize: '25px', fontWeight: '700', marginTop: '3px' }}>Prazo:</p>
+                    </div>
+                    <div style={{ display : 'flex' , flex : 1, justifyContent : 'flex-end', width : '100%' , marginRight : '5%'}}>
+                        <p className={classes.font} style={{ fontSize: '25px', marginTop: '5px', fontWeight: '500' }}>Valor</p>
+                    </div>
                 </div>
             </div>
             <br />
-            <button type="button" className={classes.button}>
+            <button type="button" className={classes.button} onClick={() => confirma()}> 
                 CONFIRMAR PEDIDO
-            </button>
+            </button></div> : <Confirmado fun={close}/> }
         </div>
     );
 }
